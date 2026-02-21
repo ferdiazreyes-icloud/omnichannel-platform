@@ -1,0 +1,52 @@
+{
+  "intenciones": [
+    {
+      "id": "venta",
+      "nombre": "Venta",
+      "categorias": [
+        "Cotización de producto",
+        "Demo de plataforma",
+        "Upgrade de plan",
+        "Renovación de contrato",
+        "Consulta de precios",
+        "Solicitud de propuesta"
+      ]
+    },
+    {
+      "id": "soporte",
+      "nombre": "Soporte Técnico",
+      "categorias": [
+        "Error en plataforma",
+        "Problema de acceso",
+        "Integración fallida",
+        "Reporte no genera",
+        "Lentitud del sistema",
+        "Configuración de cuenta"
+      ]
+    },
+    {
+      "id": "cobranza",
+      "nombre": "Cobranza",
+      "categorias": [
+        "Consulta de factura",
+        "Pago no reflejado",
+        "Solicitud de estado de cuenta",
+        "Disputa de cargo",
+        "Plan de pagos",
+        "Facturación errónea"
+      ]
+    },
+    {
+      "id": "informacion",
+      "nombre": "Información",
+      "categorias": [
+        "Información general",
+        "Horarios de atención",
+        "Sucursales",
+        "Requisitos de servicio",
+        "Política de privacidad",
+        "Términos y condiciones"
+      ]
+    }
+  ]
+}

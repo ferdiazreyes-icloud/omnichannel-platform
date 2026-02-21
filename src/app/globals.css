@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-card: #ffffff;
+  --color-card-hover: #f9fafb;
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, monospace;
+}
+
+:root {
+  --background: #f3f4f6;
+  --foreground: #111827;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.sla-a-tiempo {
+  color: #16a34a;
+  background-color: #dcfce7;
+}
+
+.sla-en-riesgo {
+  color: #f59e0b;
+  background-color: #fef3c7;
+}
+
+.sla-vencido {
+  color: #dc2626;
+  background-color: #fee2e2;
+}
+
+.canal-whatsapp { color: #25D366; }
+.canal-sms { color: #5B5EA6; }
+.canal-web { color: #2563EB; }
+.canal-facebook { color: #1877F2; }
+.canal-instagram { color: #E4405F; }
+.canal-voz { color: #F59E0B; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #a1a1a1; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}

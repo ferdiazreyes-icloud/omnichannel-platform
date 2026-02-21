@@ -1,0 +1,28 @@
+{
+  "sla": {
+    "primera_respuesta": {
+      "alta": 8,
+      "media": 15,
+      "baja": 30
+    },
+    "resolucion": {
+      "alta": 12,
+      "media": 24,
+      "baja": 48
+    }
+  },
+  "routing": {
+    "venta": { "equipo": "ventas", "prioridad_default": "media" },
+    "soporte": { "equipo": "soporte", "prioridad_default": "media" },
+    "cobranza": { "equipo": "cobranza", "prioridad_default": "alta" },
+    "informacion": { "equipo": "general", "prioridad_default": "baja" }
+  },
+  "escalamiento": {
+    "sla_vencido_minutos": 5,
+    "max_casos_por_agente": 15,
+    "alertas": {
+      "sla_en_riesgo_minutos": 10,
+      "sobrecarga_threshold": 12
+    }
+  }
+}
