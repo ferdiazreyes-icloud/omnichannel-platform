@@ -159,121 +159,123 @@ export default function HomePage() {
         <div className="fixed inset-0 z-40" onClick={() => setSelectorOpen(false)} />
       )}
 
-      {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-        <div className="text-center mb-12">
+      {/* Main */}
+      <main className="flex-1 flex flex-col items-center px-4 py-10">
+        {/* Intro */}
+        <div className="text-center mb-8">
           <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-4"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-3"
             style={{ backgroundColor: c.primario + "15", color: c.primario }}
           >
             {perfil.industria}
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            {perfil.nombre}
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {perfil.descripcion} Journey completo: desde que el cliente inicia una
-            conversaci&oacute;n hasta que su caso se resuelve, se cierra y se mide.
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">{perfil.nombre}</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            {perfil.descripcion}
           </p>
         </div>
 
-        {/* Navigation Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full">
-          <Link
-            href="/cliente"
-            className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-8 border border-gray-100 hover:border-opacity-50"
-            style={{ ["--hover-border" as string]: c.primario }}
-          >
-            <div
-              className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
-              style={{ backgroundColor: c.primario + "15" }}
-            >
-              <span className="text-3xl">💬</span>
+        {/* ═══ Command Center Hero Card ═══ */}
+        <Link
+          href="/demo"
+          className="group w-full max-w-5xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-transparent hover:border-opacity-60 mb-8"
+          style={{ borderColor: c.primario + "40" }}
+        >
+          {/* Dark preview bar */}
+          <div className="bg-gray-900 px-6 py-5 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-gray-800 group-hover:scale-110 transition-transform">
+                <span className="text-2xl">🖥️</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white">Command Center &mdash; Vista End-to-End</h3>
+                <p className="text-sm text-gray-400">
+                  Todo el journey del cliente en una sola pantalla, en tiempo real
+                </p>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Simulador de Cliente
-            </h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Experimenta el journey del cliente de {perfil.nombreCorto}. Elige un canal, conversa
-              con el bot inteligente y observa c&oacute;mo se crea un caso autom&aacute;ticamente.
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {perfil.canalesHabilitados.map((canal) => (
-                <span key={canal} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-                  {CANAL_ICONS[canal]?.icon} {CANAL_ICONS[canal]?.nombre || canal}
-                </span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-xs text-gray-500">En vivo</span>
+              </div>
+              <span
+                className="text-sm font-semibold text-white px-5 py-2 rounded-lg group-hover:brightness-110 transition-all"
+                style={{ backgroundColor: c.primario }}
+              >
+                Abrir →
+              </span>
+            </div>
+          </div>
+          {/* Layout preview */}
+          <div className="bg-gray-800 px-6 py-4 flex gap-3 h-[180px]">
+            {/* Mini chat preview */}
+            <div className="w-1/4 bg-gray-700/60 rounded-lg p-3 flex flex-col gap-2 overflow-hidden">
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="text-xs">💬</span>
+                <span className="text-[10px] font-semibold text-gray-300">Simulador</span>
+              </div>
+              <div className="flex justify-end"><div className="bg-blue-500/40 rounded-xl rounded-br-sm h-4 w-3/4" /></div>
+              <div className="flex justify-start"><div className="bg-gray-600 rounded-xl rounded-bl-sm h-6 w-4/5" /></div>
+              <div className="flex justify-end"><div className="bg-blue-500/40 rounded-xl rounded-br-sm h-4 w-2/3" /></div>
+              <div className="flex justify-start"><div className="bg-gray-600 rounded-xl rounded-bl-sm h-8 w-full" /></div>
+            </div>
+            {/* Mini agent preview */}
+            <div className="flex-1 bg-gray-700/60 rounded-lg p-3 flex flex-col gap-1.5 overflow-hidden">
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="text-xs">🎧</span>
+                <span className="text-[10px] font-semibold text-gray-300">Consola del Agente</span>
+              </div>
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex items-center gap-2 bg-gray-600/50 rounded px-2 py-1.5">
+                  <div className="w-4 h-4 rounded-full bg-gray-500/50" />
+                  <div className="flex-1 h-2 bg-gray-500/40 rounded" />
+                  <div className="w-10 h-3 rounded-full bg-blue-500/30" />
+                  <div className="w-8 h-3 rounded-full bg-yellow-500/30" />
+                </div>
               ))}
             </div>
-          </Link>
-
-          <Link
-            href="/agente"
-            className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-8 border border-gray-100"
-          >
-            <div
-              className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
-              style={{ backgroundColor: c.secundario + "15" }}
-            >
-              <span className="text-3xl">🎧</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Consola del Agente
-            </h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Gestiona casos de {perfil.nombreCorto} desde una sola interfaz. Filtra por estado,
-              prioridad y SLA. Responde al cliente sin importar el canal de origen.
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {["Bandeja", "Timeline", "SLA", "Responder", "Escalar"].map((c) => (
-                <span key={c} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-                  {c}
-                </span>
+            {/* Mini activity feed */}
+            <div className="w-1/5 bg-gray-700/60 rounded-lg p-3 flex flex-col gap-1.5 overflow-hidden">
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="text-xs">⚡</span>
+                <span className="text-[10px] font-semibold text-gray-300">Actividad</span>
+              </div>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-gray-500/40 flex-shrink-0" />
+                  <div className="flex-1 h-2 bg-gray-500/30 rounded" />
+                </div>
               ))}
             </div>
-          </Link>
-
-          <Link
-            href="/dashboard"
-            className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-8 border border-gray-100"
-          >
-            <div
-              className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
-              style={{ backgroundColor: c.acento + "15" }}
-            >
-              <span className="text-3xl">📊</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Dashboard Operacional
-            </h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Visibilidad total para supervisores de {perfil.nombreCorto}. M&eacute;tricas en tiempo real,
-              compliance de SLAs, carga por agente y alertas operacionales.
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {["KPIs", "SLA %", "CSAT", "Tendencias", "Alertas"].map((c) => (
-                <span key={c} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-                  {c}
-                </span>
+          </div>
+          {/* Dashboard strip */}
+          <div className="bg-gray-850 px-6 py-3 flex items-center gap-4" style={{ backgroundColor: "#1a1f2e" }}>
+            <span className="text-xs">📊</span>
+            <span className="text-[10px] font-semibold text-gray-400">Dashboard</span>
+            <div className="flex gap-2 ml-2">
+              {["Activos", "SLA", "Riesgo", "CSAT"].map((kpi) => (
+                <div key={kpi} className="bg-gray-700/50 rounded px-2 py-1">
+                  <span className="text-[9px] text-gray-500 uppercase">{kpi}</span>
+                </div>
               ))}
             </div>
-          </Link>
-        </div>
+            <div className="ml-auto flex items-center gap-3 text-[10px] text-gray-500">
+              <span className="flex items-center gap-1">
+                <span className="inline-block w-4 h-2 rounded-sm bg-blue-500/30" /> Estado
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="inline-block w-4 h-2 rounded-sm bg-green-500/30" /> Canal
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="inline-block w-4 h-2 rounded-sm bg-yellow-500/30" /> Agentes
+              </span>
+            </div>
+          </div>
+        </Link>
 
-        {/* Demo Link */}
-        <div className="mt-8 mb-4">
-          <Link
-            href="/demo"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
-            style={{ backgroundColor: c.primario }}
-          >
-            <span className="text-lg">🖥️</span>
-            Vista End-to-End (Command Center)
-            <span className="text-xs opacity-70 ml-1">→</span>
-          </Link>
-        </div>
-
-        {/* Journey Arrow */}
-        <div className="mt-4 flex items-center gap-3 text-sm text-gray-500 flex-wrap justify-center">
+        {/* Journey Flow */}
+        <div className="flex items-center gap-2 text-sm text-gray-500 flex-wrap justify-center mb-8">
           <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.primario + "15", color: c.primario }}>1. Descubrimiento</span>
           <span>→</span>
           <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.secundario + "15", color: c.secundario }}>2. Conversaci&oacute;n</span>
@@ -283,6 +285,90 @@ export default function HomePage() {
           <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.secundario + "25", color: c.secundario }}>4. Ejecuci&oacute;n</span>
           <span>→</span>
           <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.acento + "20", color: c.acento }}>5. Cierre</span>
+        </div>
+
+        {/* ═══ Individual views (compact) ═══ */}
+        <div className="w-full max-w-5xl">
+          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3 px-1">
+            O explora cada vista por separado
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Link
+              href="/cliente"
+              className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-5 border border-gray-100 flex items-start gap-4"
+            >
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+                style={{ backgroundColor: c.primario + "15" }}
+              >
+                <span className="text-xl">💬</span>
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-sm font-semibold text-gray-900 mb-0.5">Simulador de Cliente</h3>
+                <p className="text-xs text-gray-500 mb-2 line-clamp-2">
+                  Elige un canal, conversa con el bot y crea un caso autom&aacute;ticamente.
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {perfil.canalesHabilitados.slice(0, 4).map((canal) => (
+                    <span key={canal} className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
+                      {CANAL_ICONS[canal]?.icon} {CANAL_ICONS[canal]?.nombre || canal}
+                    </span>
+                  ))}
+                  {perfil.canalesHabilitados.length > 4 && (
+                    <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
+                      +{perfil.canalesHabilitados.length - 4}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/agente"
+              className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-5 border border-gray-100 flex items-start gap-4"
+            >
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+                style={{ backgroundColor: c.secundario + "15" }}
+              >
+                <span className="text-xl">🎧</span>
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-sm font-semibold text-gray-900 mb-0.5">Consola del Agente</h3>
+                <p className="text-xs text-gray-500 mb-2 line-clamp-2">
+                  Bandeja unificada con SLAs, filtros, vista Kanban y respuesta omnicanal.
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {["Bandeja", "Timeline", "SLA", "Escalar"].map((t) => (
+                    <span key={t} className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/dashboard"
+              className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-5 border border-gray-100 flex items-start gap-4"
+            >
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+                style={{ backgroundColor: c.acento + "15" }}
+              >
+                <span className="text-xl">📊</span>
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-sm font-semibold text-gray-900 mb-0.5">Dashboard Operacional</h3>
+                <p className="text-xs text-gray-500 mb-2 line-clamp-2">
+                  KPIs en tiempo real, compliance de SLAs, carga por agente y alertas.
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {["KPIs", "SLA %", "CSAT", "Alertas"].map((t) => (
+                    <span key={t} className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </Link>
+          </div>
         </div>
       </main>
 
