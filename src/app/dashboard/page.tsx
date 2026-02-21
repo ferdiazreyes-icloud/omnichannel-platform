@@ -171,7 +171,7 @@ export default function DashboardPage() {
                 <span className="text-white font-bold text-xs">{perfil.logo.charAt(0)}</span>
               </div>
             )}
-            <h1 className="text-lg font-semibold text-gray-900">Dashboard {perfil?.nombreCorto || ""}</h1>
+            <h1 className="text-lg font-semibold text-gray-900">Dashboard del Supervisor &mdash; {perfil?.nombreCorto || ""}</h1>
             <div className="flex items-center gap-1 ml-2">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span className="text-xs text-gray-500">Actualización en tiempo real</span>

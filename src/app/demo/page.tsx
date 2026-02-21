@@ -366,8 +366,8 @@ export default function DemoPage() {
             <span className="text-white font-bold text-xs">{perfil.logo.charAt(0)}</span>
           </div>
           <div>
-            <h1 className="text-sm font-semibold text-white">{perfil.nombreCorto} — Command Center</h1>
-            <p className="text-xs text-gray-500">Vista End-to-End en Tiempo Real</p>
+            <h1 className="text-sm font-semibold text-white">{perfil.nombreCorto} — Vista Integrada</h1>
+            <p className="text-xs text-gray-500">Flujo end-to-end demostrativo &bull; En producci&oacute;n cada rol opera en su propia interfaz</p>
           </div>
         </div>
         <div className="flex items-center gap-3">

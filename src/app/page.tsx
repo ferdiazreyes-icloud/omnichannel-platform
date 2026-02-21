@@ -111,8 +111,8 @@ export default function HomePage() {
               {selectorOpen && (
                 <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
                   <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-                    <p className="text-sm font-semibold text-gray-700">Cambiar perfil de negocio</p>
-                    <p className="text-xs text-gray-500">Configura la plataforma para otra empresa</p>
+                    <p className="text-sm font-semibold text-gray-700">Demos por industria</p>
+                    <p className="text-xs text-gray-500">Selecciona una empresa ejemplo para explorar la plataforma</p>
                   </div>
                   <div className="p-2 max-h-80 overflow-y-auto">
                     {disponibles.map((p) => (
@@ -188,9 +188,12 @@ export default function HomePage() {
                 <span className="text-2xl">🖥️</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">Command Center &mdash; Vista End-to-End</h3>
+                <h3 className="text-xl font-bold text-white">Vista Integrada &mdash; Flujo End-to-End</h3>
                 <p className="text-sm text-gray-400">
-                  Todo el journey del cliente en una sola pantalla, en tiempo real
+                  Visualiza c&oacute;mo interact&uacute;an cliente, agente y dashboard en una sola pantalla
+                </p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Solo para fines demostrativos &mdash; en producci&oacute;n cada rol tiene su propia interfaz
                 </p>
               </div>
             </div>
@@ -213,7 +216,7 @@ export default function HomePage() {
             <div className="w-1/4 bg-gray-700/60 rounded-lg p-3 flex flex-col gap-2 overflow-hidden">
               <div className="flex items-center gap-1.5 mb-1">
                 <span className="text-xs">💬</span>
-                <span className="text-[10px] font-semibold text-gray-300">Simulador</span>
+                <span className="text-[10px] font-semibold text-gray-300">Cliente</span>
               </div>
               <div className="flex justify-end"><div className="bg-blue-500/40 rounded-xl rounded-br-sm h-4 w-3/4" /></div>
               <div className="flex justify-start"><div className="bg-gray-600 rounded-xl rounded-bl-sm h-6 w-4/5" /></div>
@@ -274,23 +277,13 @@ export default function HomePage() {
           </div>
         </Link>
 
-        {/* Journey Flow */}
-        <div className="flex items-center gap-2 text-sm text-gray-500 flex-wrap justify-center mb-8">
-          <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.primario + "15", color: c.primario }}>1. Descubrimiento</span>
-          <span>→</span>
-          <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.secundario + "15", color: c.secundario }}>2. Conversaci&oacute;n</span>
-          <span>→</span>
-          <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.primario + "25", color: c.primario }}>3. Caso</span>
-          <span>→</span>
-          <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.secundario + "25", color: c.secundario }}>4. Ejecuci&oacute;n</span>
-          <span>→</span>
-          <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.acento + "20", color: c.acento }}>5. Cierre</span>
-        </div>
-
         {/* ═══ Individual views (compact) ═══ */}
         <div className="w-full max-w-5xl">
-          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3 px-1">
-            O explora cada vista por separado
+          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1 px-1">
+            Interfaces de Producci&oacute;n &mdash; por Rol
+          </p>
+          <p className="text-[11px] text-gray-400 mb-3 px-1">
+            As&iacute; se ver&iacute;a la plataforma para cada tipo de usuario
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Link
@@ -304,9 +297,12 @@ export default function HomePage() {
                 <span className="text-xl">💬</span>
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-semibold text-gray-900 mb-0.5">Simulador de Cliente</h3>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h3 className="text-sm font-semibold text-gray-900">Portal del Cliente</h3>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-medium" style={{ backgroundColor: c.primario + "15", color: c.primario }}>Vista: Cliente</span>
+                </div>
                 <p className="text-xs text-gray-500 mb-2 line-clamp-2">
-                  Elige un canal, conversa con el bot y crea un caso autom&aacute;ticamente.
+                  La experiencia del cliente final: elige un canal, conversa con el bot y crea un caso.
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {perfil.canalesHabilitados.slice(0, 4).map((canal) => (
@@ -334,7 +330,10 @@ export default function HomePage() {
                 <span className="text-xl">🎧</span>
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-semibold text-gray-900 mb-0.5">Consola del Agente</h3>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h3 className="text-sm font-semibold text-gray-900">Consola del Agente</h3>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-medium" style={{ backgroundColor: c.secundario + "15", color: c.secundario }}>Vista: Agente</span>
+                </div>
                 <p className="text-xs text-gray-500 mb-2 line-clamp-2">
                   Bandeja unificada con SLAs, filtros, vista Kanban y respuesta omnicanal.
                 </p>
@@ -357,7 +356,10 @@ export default function HomePage() {
                 <span className="text-xl">📊</span>
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-semibold text-gray-900 mb-0.5">Dashboard Operacional</h3>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h3 className="text-sm font-semibold text-gray-900">Dashboard del Supervisor</h3>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-medium" style={{ backgroundColor: c.acento + "15", color: c.acento }}>Vista: Supervisor</span>
+                </div>
                 <p className="text-xs text-gray-500 mb-2 line-clamp-2">
                   KPIs en tiempo real, compliance de SLAs, carga por agente y alertas.
                 </p>
