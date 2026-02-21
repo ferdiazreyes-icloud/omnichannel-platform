@@ -259,8 +259,21 @@ export default function HomePage() {
           </Link>
         </div>
 
+        {/* Demo Link */}
+        <div className="mt-8 mb-4">
+          <Link
+            href="/demo"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            style={{ backgroundColor: c.primario }}
+          >
+            <span className="text-lg">🖥️</span>
+            Vista End-to-End (Command Center)
+            <span className="text-xs opacity-70 ml-1">→</span>
+          </Link>
+        </div>
+
         {/* Journey Arrow */}
-        <div className="mt-12 flex items-center gap-3 text-sm text-gray-500 flex-wrap justify-center">
+        <div className="mt-4 flex items-center gap-3 text-sm text-gray-500 flex-wrap justify-center">
           <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.primario + "15", color: c.primario }}>1. Descubrimiento</span>
           <span>→</span>
           <span className="px-3 py-1 rounded-full" style={{ backgroundColor: c.secundario + "15", color: c.secundario }}>2. Conversaci&oacute;n</span>

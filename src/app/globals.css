@@ -71,3 +71,14 @@ body {
 .animate-pulse-dot {
   animation: pulse-dot 1.5s ease-in-out infinite;
 }
+
+@keyframes highlight-new {
+  0% { background-color: rgba(34, 197, 94, 0.25); }
+  50% { background-color: rgba(34, 197, 94, 0.08); }
+  100% { background-color: rgba(34, 197, 94, 0.25); }
+}
+
+.demo-highlight {
+  animation: highlight-new 1s ease-in-out 5;
+  border-left: 3px solid #22C55E;
+}
