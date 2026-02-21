@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "prisma generate && prisma db push && next build",
+    "postbuild": "node scripts/seed.js",
+    "start": "next start -p ${PORT:-3000}",
     "lint": "eslint",
-    "seed": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "node scripts/seed.js"
   },
   "prisma": {
-    "seed": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "node scripts/seed.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
