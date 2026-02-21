@@ -39,22 +39,22 @@ export interface PerfilNegocio {
 }
 
 const PERFILES: Record<string, PerfilNegocio> = {
-  "banco-ejemplo": bancoEjemplo as PerfilNegocio,
-  "telco-ejemplo": telcoEjemplo as PerfilNegocio,
-  "ecommerce-ejemplo": ecommerceEjemplo as PerfilNegocio,
   megacable: megacable as PerfilNegocio,
   "equipos-medicos": equiposMedicos as PerfilNegocio,
+  "banco-ejemplo": bancoEjemplo as PerfilNegocio,
+  "ecommerce-ejemplo": ecommerceEjemplo as PerfilNegocio,
+  "telco-ejemplo": telcoEjemplo as PerfilNegocio,
 };
 
 // In-memory active profile (server-side state)
-let perfilActivo: string = "banco-ejemplo";
+let perfilActivo: string = "megacable";
 
 export function obtenerPerfil(id?: string): PerfilNegocio {
-  return PERFILES[id || perfilActivo] || PERFILES["banco-ejemplo"];
+  return PERFILES[id || perfilActivo] || PERFILES["megacable"];
 }
 
 export function obtenerPerfilActivo(): PerfilNegocio {
-  return PERFILES[perfilActivo] || PERFILES["banco-ejemplo"];
+  return PERFILES[perfilActivo] || PERFILES["megacable"];
 }
 
 export function obtenerPerfilActivoId(): string {
