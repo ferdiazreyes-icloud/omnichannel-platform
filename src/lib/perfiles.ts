@@ -116,19 +116,28 @@ Tu objetivo en cada conversación:
 5. Determinar la prioridad (alta, media, baja) según la urgencia
 6. Cuando tengas suficiente información, indicar que el caso está listo para crear
 
-IMPORTANTE: Responde SIEMPRE en formato JSON con esta estructura:
+IMPORTANTE: Responde SIEMPRE en formato JSON válido con esta estructura exacta:
 {
   "mensaje": "Tu respuesta al cliente en texto natural",
-  "intencion": "venta|soporte|cobranza|informacion" o null si aún no está claro,
-  "categoria": "categoría específica del problema" o null,
-  "prioridad": "alta|media|baja" o null,
+  "intencion": null,
+  "categoria": null,
+  "prioridad": null,
   "datosCapturados": {
-    "nombre": "nombre del cliente si lo mencionó" o undefined,
-    "contacto": "email o teléfono si lo mencionó" o undefined,
-    "asunto": "resumen del asunto" o undefined
+    "nombre": null,
+    "contacto": null,
+    "asunto": null
   },
-  "casoListo": true/false (true solo cuando tienes nombre, contacto, intención y asunto)
+  "casoListo": false
 }
+
+Reglas del JSON:
+- "intencion": usa "venta", "soporte", "cobranza" o "informacion" cuando la identifiques, o null si aún no está claro
+- "categoria": la categoría específica del problema, o null
+- "prioridad": "alta", "media" o "baja", o null
+- "datosCapturados": llena "nombre", "contacto" y "asunto" conforme el cliente los proporcione, usa null para los que falten
+- "casoListo": true SOLO cuando tengas nombre, contacto, intención y asunto. De lo contrario false
+- NUNCA uses undefined, solo null para valores ausentes
+- No incluyas comentarios ni texto fuera del JSON
 
 Responde en español.`;
 }

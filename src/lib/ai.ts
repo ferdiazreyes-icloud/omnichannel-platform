@@ -52,7 +52,9 @@ export async function chatWithBot(
     try {
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]) as BotResponse;
+        // Replace undefined with null for valid JSON
+        const cleaned = jsonMatch[0].replace(/\bundefined\b/g, "null");
+        return JSON.parse(cleaned) as BotResponse;
       }
     } catch {
       // If JSON parsing fails, wrap the text
