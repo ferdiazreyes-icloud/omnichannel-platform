@@ -19,7 +19,15 @@ interface CanalInfo {
   icon: string;
 }
 
-const CANALES: CanalInfo[] = [
+interface PerfilData {
+  nombre: string;
+  nombreCorto: string;
+  logo: string;
+  colores: { primario: string; secundario: string; acento: string; fondo: string };
+  canalesHabilitados: string[];
+}
+
+const ALL_CANALES: CanalInfo[] = [
   { id: "whatsapp", nombre: "WhatsApp", color: "#25D366", bgColor: "#dcf8c6", icon: "💬" },
   { id: "sms", nombre: "SMS", color: "#5B5EA6", bgColor: "#e8e8f0", icon: "📱" },
   { id: "web", nombre: "Web Chat", color: "#2563EB", bgColor: "#dbeafe", icon: "🌐" },
@@ -34,13 +42,25 @@ export default function ClientePage() {
   const [input, setInput] = useState("");
   const [cargando, setCargando] = useState(false);
   const [casoCreado, setCasoCreado] = useState<{ numeroCaso: string; id: string } | null>(null);
+  const [perfil, setPerfil] = useState<PerfilData | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch("/api/perfil")
+      .then((r) => r.json())
+      .then((data) => setPerfil(data.perfil));
+  }, []);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes]);
 
-  const canal = CANALES.find((c) => c.id === canalSeleccionado);
+  const canalesDisponibles = ALL_CANALES.filter(
+    (c) => !perfil || perfil.canalesHabilitados.includes(c.id)
+  );
+  const canal = canalesDisponibles.find((c) => c.id === canalSeleccionado);
+  const nombreEmpresa = perfil?.nombreCorto || "Arena";
+  const colorPrimario = perfil?.colores.primario || "#2563EB";
 
   const enviarMensaje = async () => {
     if (!input.trim() || cargando || !canalSeleccionado) return;
@@ -79,7 +99,6 @@ export default function ClientePage() {
 
       setMensajes([...nuevosMensajes, respuestaBot]);
 
-      // If bot says case is ready, create it
       if (data.casoListo) {
         const casoRes = await fetch("/api/casos", {
           method: "POST",
@@ -98,7 +117,6 @@ export default function ClientePage() {
         const caso = await casoRes.json();
         setCasoCreado(caso);
 
-        // Auto-assign
         await fetch("/api/routing", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -126,19 +144,29 @@ export default function ClientePage() {
         <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Link href="/" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+              <Link href="/" className="font-medium text-sm" style={{ color: colorPrimario }}>
                 ← Inicio
               </Link>
               <span className="text-gray-300">|</span>
-              <h1 className="text-lg font-semibold text-gray-900">Simulador de Canal</h1>
+              <div className="flex items-center gap-2">
+                {perfil && (
+                  <div
+                    className="w-7 h-7 rounded flex items-center justify-center"
+                    style={{ backgroundColor: colorPrimario }}
+                  >
+                    <span className="text-white font-bold text-xs">{perfil.logo.charAt(0)}</span>
+                  </div>
+                )}
+                <h1 className="text-lg font-semibold text-gray-900">Simulador de Canal</h1>
+              </div>
             </div>
           </div>
         </header>
         <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Elige tu canal de contacto</h2>
-          <p className="text-gray-500 mb-8">Selecciona cómo quieres comunicarte con Arena</p>
+          <p className="text-gray-500 mb-8">Selecciona cómo quieres comunicarte con {nombreEmpresa}</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-xl">
-            {CANALES.map((c) => (
+            {canalesDisponibles.map((c) => (
               <button
                 key={c.id}
                 onClick={() => setCanalSeleccionado(c.id)}
@@ -160,7 +188,7 @@ export default function ClientePage() {
       {/* Chat header */}
       <header
         className="text-white px-4 py-3 flex items-center justify-between shadow-md"
-        style={{ backgroundColor: canal?.color || "#2563EB" }}
+        style={{ backgroundColor: canal?.color || colorPrimario }}
       >
         <div className="flex items-center gap-3">
           <button
@@ -176,7 +204,7 @@ export default function ClientePage() {
           <span className="text-white/50">|</span>
           <span className="text-2xl">{canal?.icon}</span>
           <div>
-            <h1 className="font-semibold">Arena Analytics</h1>
+            <h1 className="font-semibold">{nombreEmpresa}</h1>
             <p className="text-xs text-white/70">
               {canal?.nombre} • En línea
             </p>
@@ -193,12 +221,11 @@ export default function ClientePage() {
         className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
         style={{ backgroundColor: canal?.bgColor || "#f3f4f6" }}
       >
-        {/* Welcome message */}
         {mensajes.length === 0 && (
           <div className="text-center py-8">
             <span className="text-5xl mb-4 block">{canal?.icon}</span>
             <p className="text-gray-600 text-sm">
-              Inicia la conversación con el asistente virtual de Arena
+              Inicia la conversación con el asistente virtual de {nombreEmpresa}
             </p>
           </div>
         )}
@@ -211,14 +238,15 @@ export default function ClientePage() {
             <div
               className={`max-w-xs md:max-w-md rounded-2xl px-4 py-2.5 shadow-sm ${
                 msg.role === "user"
-                  ? "bg-blue-600 text-white rounded-br-sm"
+                  ? "text-white rounded-br-sm"
                   : "bg-white text-gray-900 rounded-bl-sm"
               }`}
+              style={msg.role === "user" ? { backgroundColor: colorPrimario } : undefined}
             >
               <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
               <p
                 className={`text-xs mt-1 ${
-                  msg.role === "user" ? "text-blue-200" : "text-gray-400"
+                  msg.role === "user" ? "text-white/60" : "text-gray-400"
                 }`}
               >
                 {msg.timestamp.toLocaleTimeString("es-MX", {
@@ -242,7 +270,6 @@ export default function ClientePage() {
           </div>
         )}
 
-        {/* Case created banner */}
         {casoCreado && (
           <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center animate-fade-in">
             <p className="text-green-800 font-semibold mb-1">Caso creado exitosamente</p>
@@ -251,7 +278,8 @@ export default function ClientePage() {
             </p>
             <Link
               href={`/agente/${casoCreado.id}`}
-              className="inline-block text-xs bg-green-600 text-white px-4 py-1.5 rounded-full hover:bg-green-700 transition-colors"
+              className="inline-block text-xs text-white px-4 py-1.5 rounded-full transition-colors"
+              style={{ backgroundColor: colorPrimario }}
             >
               Ver caso en consola del agente →
             </Link>
@@ -277,7 +305,8 @@ export default function ClientePage() {
             <button
               onClick={enviarMensaje}
               disabled={cargando || !input.trim()}
-              className="bg-blue-600 text-white rounded-full px-5 py-2.5 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="text-white rounded-full px-5 py-2.5 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              style={{ backgroundColor: colorPrimario }}
             >
               Enviar
             </button>

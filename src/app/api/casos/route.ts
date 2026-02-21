@@ -5,6 +5,7 @@ import {
   calcularSLAPrimeraRespuesta,
   calcularSLAResolucion,
 } from "@/lib/sla";
+import { obtenerPerfilActivo } from "@/lib/perfiles";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
   const now = new Date();
   const caso = await prisma.caso.create({
     data: {
-      numeroCaso: generarNumeroCaso(),
+      numeroCaso: generarNumeroCaso(obtenerPerfilActivo().nombreCorto.toUpperCase().slice(0, 4)),
       canalOrigen,
       clienteNombre,
       clienteContacto,

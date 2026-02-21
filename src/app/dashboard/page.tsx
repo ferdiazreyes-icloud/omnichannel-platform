@@ -2,6 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+
+interface PerfilBasico {
+  nombreCorto: string;
+  logo: string;
+  colores: { primario: string; secundario: string; acento: string; fondo: string };
+}
 import {
   BarChart,
   Bar,
@@ -85,6 +91,13 @@ export default function DashboardPage() {
   const [metricas, setMetricas] = useState<Metricas | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"operacion" | "negocio">("operacion");
+  const [perfil, setPerfil] = useState<PerfilBasico | null>(null);
+
+  useEffect(() => {
+    fetch("/api/perfil")
+      .then((r) => r.json())
+      .then((data) => setPerfil(data.perfil));
+  }, []);
 
   useEffect(() => {
     const fetchMetricas = async () => {
@@ -146,11 +159,19 @@ export default function DashboardPage() {
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+            <Link href="/" className="font-medium text-sm" style={{ color: perfil?.colores.primario || "#2563EB" }}>
               ← Inicio
             </Link>
             <span className="text-gray-300">|</span>
-            <h1 className="text-lg font-semibold text-gray-900">Dashboard</h1>
+            {perfil && (
+              <div
+                className="w-7 h-7 rounded flex items-center justify-center"
+                style={{ backgroundColor: perfil.colores.primario }}
+              >
+                <span className="text-white font-bold text-xs">{perfil.logo.charAt(0)}</span>
+              </div>
+            )}
+            <h1 className="text-lg font-semibold text-gray-900">Dashboard {perfil?.nombreCorto || ""}</h1>
             <div className="flex items-center gap-1 ml-2">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span className="text-xs text-gray-500">Actualización en tiempo real</span>

@@ -68,6 +68,13 @@ export default function CasoDetallePage({ params }: { params: Promise<{ casoId: 
   const [enviando, setEnviando] = useState(false);
   const [sugerencia, setSugerencia] = useState("");
   const [cargandoSugerencia, setCargandoSugerencia] = useState(false);
+  const [perfilColor, setPerfilColor] = useState("#2563EB");
+
+  useEffect(() => {
+    fetch("/api/perfil")
+      .then((r) => r.json())
+      .then((data) => setPerfilColor(data.perfil?.colores?.primario || "#2563EB"));
+  }, []);
 
   const cargarCaso = async () => {
     const res = await fetch(`/api/casos/${casoId}`);
@@ -176,7 +183,7 @@ export default function CasoDetallePage({ params }: { params: Promise<{ casoId: 
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/agente" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+            <Link href="/agente" className="font-medium text-sm" style={{ color: perfilColor }}>
               ← Bandeja
             </Link>
             <span className="text-gray-300">|</span>

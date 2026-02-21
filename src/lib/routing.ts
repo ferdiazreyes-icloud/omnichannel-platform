@@ -78,8 +78,8 @@ export async function asignarCaso(casoId: string) {
   });
 }
 
-export function generarNumeroCaso(): string {
+export function generarNumeroCaso(prefix: string = "CASO"): string {
   const timestamp = Date.now().toString(36).toUpperCase();
   const random = Math.random().toString(36).substring(2, 5).toUpperCase();
-  return `ARENA-${timestamp}-${random}`;
+  return `${prefix}-${timestamp}-${random}`;
 }

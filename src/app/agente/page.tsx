@@ -3,6 +3,12 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
+interface PerfilBasico {
+  nombreCorto: string;
+  logo: string;
+  colores: { primario: string; secundario: string; acento: string; fondo: string };
+}
+
 interface Agente {
   id: string;
   nombre: string;
@@ -85,6 +91,13 @@ export default function AgentePage() {
   const [filtroCanal, setFiltroCanal] = useState<string>("");
   const [page, setPage] = useState(1);
   const [vistaKanban, setVistaKanban] = useState(false);
+  const [perfil, setPerfil] = useState<PerfilBasico | null>(null);
+
+  useEffect(() => {
+    fetch("/api/perfil")
+      .then((r) => r.json())
+      .then((data) => setPerfil(data.perfil));
+  }, []);
 
   const cargarCasos = useCallback(async () => {
     setLoading(true);
@@ -126,11 +139,19 @@ export default function AgentePage() {
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
+            <Link href="/" className="font-medium text-sm" style={{ color: perfil?.colores.primario || "#2563EB" }}>
               ← Inicio
             </Link>
             <span className="text-gray-300">|</span>
-            <h1 className="text-lg font-semibold text-gray-900">Consola del Agente</h1>
+            {perfil && (
+              <div
+                className="w-7 h-7 rounded flex items-center justify-center"
+                style={{ backgroundColor: perfil.colores.primario }}
+              >
+                <span className="text-white font-bold text-xs">{perfil.logo.charAt(0)}</span>
+              </div>
+            )}
+            <h1 className="text-lg font-semibold text-gray-900">Consola {perfil?.nombreCorto || "Agente"}</h1>
             <span className="text-sm text-gray-500">({total} casos)</span>
           </div>
           <div className="flex items-center gap-2">
