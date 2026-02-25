@@ -372,28 +372,28 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* Voice Agent Spike */}
-          <div className="mt-6">
+          {/* Voice Agent */}
+          <div className="mt-4">
             <Link
               href="/voz"
               className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-5 border border-gray-100 flex items-start gap-4"
             >
               <div
                 className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
-                style={{ backgroundColor: "#F59E0B15" }}
+                style={{ backgroundColor: c.acento + "15" }}
               >
                 <span className="text-xl">📞</span>
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-0.5">
                   <h3 className="text-sm font-semibold text-gray-900">Asistente de Voz</h3>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-medium bg-amber-50 text-amber-600">Spike</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-medium" style={{ backgroundColor: c.acento + "15", color: c.acento }}>Vista: Voz</span>
                 </div>
                 <p className="text-xs text-gray-500 mb-2">
-                  Conversa con el asistente virtual por voz en tiempo real. OpenAI Realtime API + WebRTC.
+                  Canal de atención por voz en tiempo real con transcripción y creación de casos automática.
                 </p>
                 <div className="flex flex-wrap gap-1">
-                  {["WebRTC", "Realtime", "Voz a Voz", "Sub-300ms"].map((t) => (
+                  {["Tiempo real", "Transcripción", "Crear caso", "Voz a voz"].map((t) => (
                     <span key={t} className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">{t}</span>
                   ))}
                 </div>

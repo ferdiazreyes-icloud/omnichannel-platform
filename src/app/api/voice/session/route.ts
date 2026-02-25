@@ -3,13 +3,6 @@ import { obtenerPerfilActivo } from "@/lib/perfiles";
 
 export async function POST() {
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "OPENAI_API_KEY not configured" },
-      { status: 500 }
-    );
-  }
-
   const perfil = obtenerPerfilActivo();
   const conocimiento = perfil.conocimiento;
 
@@ -41,6 +34,18 @@ REGLAS PARA VOZ:
 - Si necesitas crear un caso, pide: nombre, datos de contacto, y descripción del problema.
 - NO uses formato JSON, listas, ni markdown. Solo texto natural hablado.
 - Si no sabes algo, ofrece transferir a un agente humano.`;
+
+  // If no API key, return simulation mode flag
+  if (!apiKey) {
+    return NextResponse.json({
+      simulation: true,
+      perfil: {
+        nombre: perfil.nombre,
+        nombreCorto: perfil.nombreCorto,
+        bienvenida: perfil.mensajesBienvenida.voz || `Gracias por llamar a ${perfil.nombreCorto}. ¿En qué te puedo ayudar?`,
+      },
+    });
+  }
 
   try {
     const response = await fetch(

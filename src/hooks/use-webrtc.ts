@@ -15,21 +15,43 @@ interface UseWebRTCReturn {
   error: string | null;
   transcript: TranscriptEntry[];
   isAssistantSpeaking: boolean;
+  isSimulation: boolean;
   connect: () => Promise<void>;
   disconnect: () => void;
 }
+
+// Simulated conversation responses (used when no OPENAI_API_KEY)
+const SIMULATION_RESPONSES = [
+  "Entiendo, déjame verificar eso en nuestro sistema.",
+  "Claro, te puedo ayudar con eso. ¿Me podrías dar tu nombre completo?",
+  "Perfecto, gracias. ¿Y un número de teléfono o correo donde te podamos contactar?",
+  "Muy bien, ya tengo toda la información. Voy a crear un caso para que un especialista te atienda lo antes posible.",
+  "¿Hay algo más en lo que te pueda ayudar?",
+  "Muchas gracias por llamar. Que tengas un excelente día.",
+];
 
 export function useWebRTC(): UseWebRTCReturn {
   const [state, setState] = useState<ConnectionState>("disconnected");
   const [error, setError] = useState<string | null>(null);
   const [transcript, setTranscript] = useState<TranscriptEntry[]>([]);
   const [isAssistantSpeaking, setIsAssistantSpeaking] = useState(false);
+  const [isSimulation, setIsSimulation] = useState(false);
 
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const simIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const simIndexRef = useRef(0);
 
   const addTranscript = useCallback((role: "user" | "assistant", text: string) => {
     setTranscript((prev) => [...prev, { role, text, timestamp: Date.now() }]);
+  }, []);
+
+  const stopSimulation = useCallback(() => {
+    if (simIntervalRef.current) {
+      clearInterval(simIntervalRef.current);
+      simIntervalRef.current = null;
+    }
+    simIndexRef.current = 0;
   }, []);
 
   const disconnect = useCallback(() => {
@@ -41,15 +63,62 @@ export function useWebRTC(): UseWebRTCReturn {
       streamRef.current.getTracks().forEach((t) => t.stop());
       streamRef.current = null;
     }
+    stopSimulation();
     setState("disconnected");
     setIsAssistantSpeaking(false);
-  }, []);
+  }, [stopSimulation]);
+
+  const startSimulation = useCallback((bienvenida: string) => {
+    setIsSimulation(true);
+    setState("connected");
+    simIndexRef.current = 0;
+
+    // Send welcome message after a short delay
+    setTimeout(() => {
+      setIsAssistantSpeaking(true);
+      setTimeout(() => {
+        addTranscript("assistant", bienvenida);
+        setIsAssistantSpeaking(false);
+      }, 1500);
+    }, 500);
+
+    // Simulate periodic "user speaks then assistant responds"
+    simIntervalRef.current = setInterval(() => {
+      const idx = simIndexRef.current;
+      if (idx >= SIMULATION_RESPONSES.length) {
+        stopSimulation();
+        return;
+      }
+
+      // Simulate user speaking
+      const userMessages = [
+        "Hola, tengo un problema con mi servicio.",
+        "Me llamo Juan Pérez.",
+        "Mi correo es juan@ejemplo.com",
+        "Sí, es sobre una falla en el servicio.",
+        "No, eso es todo, gracias.",
+      ];
+      const userMsg = userMessages[idx] || "Entendido, gracias.";
+      addTranscript("user", userMsg);
+
+      // Simulate assistant responding after delay
+      setTimeout(() => {
+        setIsAssistantSpeaking(true);
+        setTimeout(() => {
+          addTranscript("assistant", SIMULATION_RESPONSES[idx]);
+          setIsAssistantSpeaking(false);
+          simIndexRef.current++;
+        }, 1200);
+      }, 800);
+    }, 5000);
+  }, [addTranscript, stopSimulation]);
 
   const connect = useCallback(async () => {
     try {
       setState("connecting");
       setError(null);
       setTranscript([]);
+      setIsSimulation(false);
 
       // 1. Get ephemeral token from our API
       const tokenRes = await fetch("/api/voice/session", { method: "POST" });
@@ -58,6 +127,13 @@ export function useWebRTC(): UseWebRTCReturn {
         throw new Error(errData.error || "Failed to get session token");
       }
       const session = await tokenRes.json();
+
+      // Check if server returned simulation mode
+      if (session.simulation) {
+        startSimulation(session.perfil.bienvenida);
+        return;
+      }
+
       const ephemeralKey = session.client_secret?.value;
       if (!ephemeralKey) {
         throw new Error("No ephemeral key in session response");
@@ -143,7 +219,7 @@ export function useWebRTC(): UseWebRTCReturn {
       setState("error");
       disconnect();
     }
-  }, [disconnect, addTranscript]);
+  }, [disconnect, addTranscript, startSimulation]);
 
-  return { state, error, transcript, isAssistantSpeaking, connect, disconnect };
+  return { state, error, transcript, isAssistantSpeaking, isSimulation, connect, disconnect };
 }

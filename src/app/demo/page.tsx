@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useWebRTC, type ConnectionState } from "@/hooks/use-webrtc";
 import {
   BarChart,
   Bar,
@@ -134,6 +135,12 @@ export default function DemoPage() {
   const [casoCreado, setCasoCreado] = useState<{ numeroCaso: string; id: string } | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Voice panel state
+  const webrtc = useWebRTC();
+  const [vozCasoCreado, setVozCasoCreado] = useState<{ numeroCaso: string; id: string } | null>(null);
+  const [vozCreandoCaso, setVozCreandoCaso] = useState(false);
+  const vozTranscriptEndRef = useRef<HTMLDivElement>(null);
+
   // Agent panel state
   const [casos, setCasos] = useState<Caso[]>([]);
   const [totalCasos, setTotalCasos] = useState(0);
@@ -216,6 +223,87 @@ export default function DemoPage() {
   useEffect(() => {
     actividadRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   }, [eventos]);
+
+  useEffect(() => {
+    vozTranscriptEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [webrtc.transcript]);
+
+  // ─── Voice call events ────────────────────────────────────────
+  const prevVozState = useRef<ConnectionState>("disconnected");
+  useEffect(() => {
+    if (webrtc.state === "connected" && prevVozState.current !== "connected") {
+      agregarEvento("chat", "Llamada de voz iniciada", "📞", "#F59E0B");
+    }
+    if (webrtc.state === "disconnected" && prevVozState.current === "connected") {
+      agregarEvento("chat", "Llamada de voz finalizada", "📞", "#6B7280");
+    }
+    prevVozState.current = webrtc.state;
+  }, [webrtc.state, agregarEvento]);
+
+  useEffect(() => {
+    const t = webrtc.transcript;
+    if (t.length === 0) return;
+    const last = t[t.length - 1];
+    const label = last.role === "user" ? "Cliente (voz)" : "Asistente (voz)";
+    const icon = last.role === "user" ? "🎙️" : "🤖";
+    const color = last.role === "user" ? "#3B82F6" : "#8B5CF6";
+    agregarEvento("chat", `${label}: "${last.text.substring(0, 60)}${last.text.length > 60 ? "..." : ""}"`, icon, color);
+  }, [webrtc.transcript, agregarEvento]);
+
+  const crearCasoDesdeVoz = useCallback(async () => {
+    if (webrtc.transcript.length === 0 || vozCreandoCaso) return;
+    setVozCreandoCaso(true);
+
+    try {
+      const resumen = webrtc.transcript
+        .map((t) => `${t.role === "user" ? "Cliente" : "Asistente"}: ${t.text}`)
+        .join("\n");
+
+      const firstUserMsg = webrtc.transcript.find((t) => t.role === "user")?.text || "Cliente Voz";
+
+      agregarEvento("caso", "Creando caso desde llamada de voz...", "⚡", "#F59E0B");
+
+      const casoRes = await fetch("/api/casos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          canalOrigen: "voz",
+          clienteNombre: firstUserMsg.substring(0, 50),
+          clienteContacto: "Llamada de voz",
+          intencion: "informacion",
+          categoria: "Consulta por voz",
+          prioridad: "media",
+          resumen: resumen.substring(0, 500),
+        }),
+      });
+
+      const caso = await casoRes.json();
+      setVozCasoCreado(caso);
+      agregarEvento("caso", `Caso ${caso.numeroCaso} creado desde llamada de voz`, "🎫", "#22C55E");
+
+      const routingRes = await fetch("/api/routing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ casoId: caso.id }),
+      });
+      const routingData = await routingRes.json();
+
+      if (routingData.agente) {
+        agregarEvento("routing", `Asignado a ${routingData.agente.nombre} (${routingData.agente.equipo})`, "🎯", "#06B6D4");
+      }
+
+      agregarEvento("sla", "SLA iniciado — respuesta: 15min, resolución: 24hrs", "⏱️", "#F59E0B");
+
+      setCasoHighlight(caso.id);
+      setTimeout(() => setCasoHighlight(null), 5000);
+      await cargarCasos();
+      await cargarMetricas();
+    } catch {
+      agregarEvento("sistema", "Error al crear caso desde voz", "❌", "#EF4444");
+    } finally {
+      setVozCreandoCaso(false);
+    }
+  }, [webrtc.transcript, vozCreandoCaso, agregarEvento, cargarCasos, cargarMetricas]);
 
   // ─── Chat logic ─────────────────────────────────────────────
   const seleccionarCanal = (canal: Canal) => {
@@ -312,6 +400,10 @@ export default function DemoPage() {
   };
 
   const reiniciarChat = () => {
+    if (canalSeleccionado === "voz") {
+      webrtc.disconnect();
+      setVozCasoCreado(null);
+    }
     setCanalSeleccionado(null);
     setMensajes([]);
     setCasoCreado(null);
@@ -421,6 +513,142 @@ export default function DemoPage() {
                 })}
               </div>
             </div>
+          ) : canalSeleccionado === "voz" ? (
+            /* Voice interface */
+            <>
+              <div
+                className="px-3 py-2 flex items-center gap-2"
+                style={{ backgroundColor: CANALES.voz.color + "20" }}
+              >
+                <span className="text-lg">📞</span>
+                <div>
+                  <p className="text-sm font-medium text-white">{perfil.nombreCorto}</p>
+                  <p className="text-xs" style={{ color: CANALES.voz.color }}>
+                    Voz {webrtc.state === "connected" ? "• En llamada" : "• Disponible"}
+                  </p>
+                </div>
+                {webrtc.state === "connected" && (
+                  <div className="ml-auto w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                )}
+                {webrtc.isSimulation && (
+                  <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-medium">SIM</span>
+                )}
+              </div>
+
+              <div className="flex-1 flex flex-col items-center justify-center gap-4 px-4" style={{ backgroundColor: CANALES.voz.bgColor + "15" }}>
+                {/* Mini pulse ring */}
+                <div className="relative w-20 h-20 flex items-center justify-center">
+                  {webrtc.state === "connected" && (
+                    <>
+                      <span
+                        className={`absolute inset-0 rounded-full opacity-15 ${webrtc.isAssistantSpeaking ? "animate-ping" : ""}`}
+                        style={{ backgroundColor: colorPrimario, animationDuration: "1.5s" }}
+                      />
+                      <span className="absolute inset-2 rounded-full opacity-20" style={{ backgroundColor: colorPrimario }} />
+                    </>
+                  )}
+                  <div
+                    className="relative w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-colors"
+                    style={{ backgroundColor: webrtc.state === "connected" ? colorPrimario : "#374151" }}
+                  >
+                    <span className="text-xl">📞</span>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  {webrtc.state === "disconnected" && webrtc.transcript.length === 0 && (
+                    <p className="text-xs text-gray-500">Presiona para iniciar llamada</p>
+                  )}
+                  {webrtc.state === "disconnected" && webrtc.transcript.length > 0 && !vozCasoCreado && (
+                    <p className="text-xs text-gray-400">Llamada finalizada</p>
+                  )}
+                  {webrtc.state === "connecting" && (
+                    <p className="text-xs text-amber-400">Conectando...</p>
+                  )}
+                  {webrtc.state === "connected" && !webrtc.isAssistantSpeaking && (
+                    <p className="text-xs text-green-400">Escuchando...</p>
+                  )}
+                  {webrtc.state === "connected" && webrtc.isAssistantSpeaking && (
+                    <p className="text-xs" style={{ color: colorPrimario }}>Respondiendo...</p>
+                  )}
+                  {webrtc.state === "error" && (
+                    <p className="text-xs text-red-400">{webrtc.error || "Error"}</p>
+                  )}
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      if (webrtc.state === "connected" || webrtc.state === "connecting") {
+                        webrtc.disconnect();
+                      } else {
+                        setVozCasoCreado(null);
+                        webrtc.connect();
+                      }
+                    }}
+                    disabled={webrtc.state === "connecting"}
+                    className={`px-5 py-2 rounded-full text-xs font-semibold text-white transition-all disabled:opacity-50 ${
+                      webrtc.state === "connected" ? "bg-red-500 hover:bg-red-600" : ""
+                    }`}
+                    style={webrtc.state !== "connected" ? { backgroundColor: colorPrimario } : undefined}
+                  >
+                    {webrtc.state === "connecting" && "Conectando..."}
+                    {webrtc.state === "disconnected" && (webrtc.transcript.length > 0 ? "Nueva llamada" : "Llamar")}
+                    {webrtc.state === "connected" && "Colgar"}
+                    {webrtc.state === "error" && "Reintentar"}
+                  </button>
+
+                  {webrtc.state === "disconnected" && webrtc.transcript.length > 0 && !vozCasoCreado && (
+                    <button
+                      onClick={crearCasoDesdeVoz}
+                      disabled={vozCreandoCaso}
+                      className="px-5 py-2 rounded-full text-xs font-semibold text-white transition-all disabled:opacity-50"
+                      style={{ backgroundColor: CANALES.voz.color }}
+                    >
+                      {vozCreandoCaso ? "Creando..." : "Crear caso"}
+                    </button>
+                  )}
+                </div>
+
+                {vozCasoCreado && (
+                  <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-3 text-center animate-fade-in w-full">
+                    <p className="text-green-400 font-semibold text-xs mb-1">Caso creado</p>
+                    <p className="text-green-300 text-[11px] font-mono">{vozCasoCreado.numeroCaso}</p>
+                    <p className="text-green-500/60 text-[10px] mt-1">Visible en la consola →</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Voice transcript */}
+              {webrtc.transcript.length > 0 && (
+                <div className="max-h-[140px] overflow-y-auto px-3 py-2 space-y-1.5 border-t border-gray-700">
+                  {webrtc.transcript.map((entry, i) => (
+                    <div key={i} className={`flex ${entry.role === "user" ? "justify-end" : "justify-start"}`}>
+                      <div className={`max-w-[85%] px-2.5 py-1.5 rounded-xl text-[11px] ${
+                        entry.role === "user"
+                          ? "text-white rounded-br-sm"
+                          : "bg-gray-700 text-gray-200 rounded-bl-sm"
+                      }`} style={entry.role === "user" ? { backgroundColor: colorPrimario } : undefined}>
+                        <span className="text-[9px] font-medium block mb-0.5 opacity-50">
+                          {entry.role === "user" ? "Tu" : "Asistente"}
+                        </span>
+                        {entry.text}
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={vozTranscriptEndRef} />
+                </div>
+              )}
+
+              <div className="bg-gray-800 border-t border-gray-700 px-3 py-2">
+                <button
+                  onClick={reiniciarChat}
+                  className="w-full text-xs text-gray-400 hover:text-white border border-gray-600 rounded-lg py-2 transition-colors"
+                >
+                  Cambiar canal
+                </button>
+              </div>
+            </>
           ) : (
             /* Chat interface */
             <>
