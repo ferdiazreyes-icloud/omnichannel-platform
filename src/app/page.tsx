@@ -2,6 +2,46 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import InteractiveTour, { type TourStep } from "@/components/tour/InteractiveTour";
+
+const TOUR_STEPS: TourStep[] = [
+  {
+    target: "profile-selector",
+    title: "Selector de empresa",
+    description: "Cambia entre distintas empresas demo para ver cómo se adapta la plataforma a cada industria.",
+    position: "bottom",
+  },
+  {
+    target: "hero-card",
+    title: "Vista integrada",
+    description: "Abre la demo end-to-end: cliente, agente y dashboard en una sola pantalla.",
+    position: "bottom",
+  },
+  {
+    target: "card-cliente",
+    title: "Portal del Cliente",
+    description: "Simula la experiencia del cliente: elige un canal, chatea con el bot y crea un caso.",
+    position: "bottom",
+  },
+  {
+    target: "card-agente",
+    title: "Consola del Agente",
+    description: "Bandeja de casos con SLAs, filtros y vistas Kanban/Lista para el equipo de soporte.",
+    position: "bottom",
+  },
+  {
+    target: "card-dashboard",
+    title: "Dashboard del Supervisor",
+    description: "KPIs en tiempo real, gráficos de operación y alertas de SLA para supervisores.",
+    position: "bottom",
+  },
+  {
+    target: "card-voz",
+    title: "Asistente de Voz",
+    description: "Canal de atención por voz en tiempo real con transcripción automática.",
+    position: "top",
+  },
+];
 
 interface PerfilResumen {
   id: string;
@@ -91,7 +131,7 @@ export default function HomePage() {
           </div>
           <div className="flex items-center gap-3">
             {/* Profile Selector */}
-            <div className="relative">
+            <div className="relative" data-tour="profile-selector">
               <button
                 onClick={() => setSelectorOpen(!selectorOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
@@ -178,6 +218,7 @@ export default function HomePage() {
         {/* ═══ Command Center Hero Card ═══ */}
         <Link
           href="/demo"
+          data-tour="hero-card"
           className="group w-full max-w-5xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-transparent hover:border-opacity-60 mb-8"
           style={{ borderColor: c.primario + "40" }}
         >
@@ -288,6 +329,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Link
               href="/cliente"
+              data-tour="card-cliente"
               className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-5 border border-gray-100 flex items-start gap-4"
             >
               <div
@@ -321,6 +363,7 @@ export default function HomePage() {
 
             <Link
               href="/agente"
+              data-tour="card-agente"
               className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-5 border border-gray-100 flex items-start gap-4"
             >
               <div
@@ -347,6 +390,7 @@ export default function HomePage() {
 
             <Link
               href="/dashboard"
+              data-tour="card-dashboard"
               className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-5 border border-gray-100 flex items-start gap-4"
             >
               <div
@@ -376,6 +420,7 @@ export default function HomePage() {
           <div className="mt-4">
             <Link
               href="/voz"
+              data-tour="card-voz"
               className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-5 border border-gray-100 flex items-start gap-4"
             >
               <div
@@ -409,6 +454,8 @@ export default function HomePage() {
           Arena Analytics — Plataforma de Customer Operations Omnicanal para {perfil.nombre}
         </div>
       </footer>
+
+      <InteractiveTour tourId="home" steps={TOUR_STEPS} accentColor={c.primario} />
     </div>
   );
 }

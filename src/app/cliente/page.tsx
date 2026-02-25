@@ -2,6 +2,37 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import InteractiveTour, { type TourStep } from "@/components/tour/InteractiveTour";
+
+const TOUR_STEPS_SELECTOR: TourStep[] = [
+  {
+    target: "cliente-header",
+    title: "Portal del Cliente",
+    description: "Esta es la vista que ve el usuario final cuando quiere contactar a la empresa.",
+    position: "bottom",
+  },
+  {
+    target: "channel-grid",
+    title: "Elige un canal",
+    description: "El cliente selecciona su canal preferido: WhatsApp, SMS, Web, Facebook, Instagram o Voz.",
+    position: "top",
+  },
+];
+
+const TOUR_STEPS_CHAT: TourStep[] = [
+  {
+    target: "chat-area",
+    title: "Conversación con el bot",
+    description: "El bot de IA responde preguntas y recopila datos para crear un caso de soporte automáticamente.",
+    position: "bottom",
+  },
+  {
+    target: "chat-input",
+    title: "Escribe un mensaje",
+    description: "Prueba escribir algo como \"necesito ayuda con mi pedido\" para ver el flujo completo.",
+    position: "top",
+  },
+];
 
 type Canal = "whatsapp" | "sms" | "web" | "facebook" | "instagram" | "voz";
 
@@ -141,7 +172,7 @@ export default function ClientePage() {
   if (!canalSeleccionado) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col">
-        <header className="bg-white shadow-sm border-b border-gray-200">
+        <header className="bg-white shadow-sm border-b border-gray-200" data-tour="cliente-header">
           <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Link href="/" className="font-medium text-sm" style={{ color: colorPrimario }}>
@@ -165,7 +196,7 @@ export default function ClientePage() {
         <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Elige tu canal de contacto</h2>
           <p className="text-gray-500 mb-8">Selecciona cómo quieres comunicarte con {nombreEmpresa}</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-xl">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-xl" data-tour="channel-grid">
             {canalesDisponibles.map((c) => (
               <button
                 key={c.id}
@@ -178,6 +209,7 @@ export default function ClientePage() {
             ))}
           </div>
         </main>
+        <InteractiveTour tourId="cliente-selector" steps={TOUR_STEPS_SELECTOR} accentColor={colorPrimario} />
       </div>
     );
   }
@@ -658,6 +690,7 @@ export default function ClientePage() {
       {/* Chat messages */}
       <main
         className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
+        data-tour="chat-area"
         style={{ backgroundColor: canal?.bgColor || "#f3f4f6" }}
       >
         {mensajes.length === 0 && (
@@ -715,7 +748,7 @@ export default function ClientePage() {
 
       {/* Input */}
       {!casoCreado && (
-        <div className="bg-white border-t border-gray-200 px-4 py-3">
+        <div className="bg-white border-t border-gray-200 px-4 py-3" data-tour="chat-input">
           <div className="flex gap-2 max-w-3xl mx-auto">
             <input
               type="text"
@@ -737,6 +770,7 @@ export default function ClientePage() {
           </div>
         </div>
       )}
+      <InteractiveTour tourId="cliente-chat" steps={TOUR_STEPS_CHAT} accentColor={colorPrimario} />
     </div>
   );
 }

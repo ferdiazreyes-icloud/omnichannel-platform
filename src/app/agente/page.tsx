@@ -2,6 +2,34 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import InteractiveTour, { type TourStep } from "@/components/tour/InteractiveTour";
+
+const TOUR_STEPS: TourStep[] = [
+  {
+    target: "agente-header",
+    title: "Consola del Agente",
+    description: "Aquí el agente de soporte gestiona todos los casos que llegan desde cualquier canal.",
+    position: "bottom",
+  },
+  {
+    target: "view-toggle",
+    title: "Vista Lista / Kanban",
+    description: "Alterna entre vista de tabla y tablero Kanban para organizar los casos.",
+    position: "bottom",
+  },
+  {
+    target: "filter-section",
+    title: "Filtros rápidos",
+    description: "Filtra por estado, prioridad o canal para encontrar casos específicos.",
+    position: "bottom",
+  },
+  {
+    target: "cases-content",
+    title: "Lista de casos",
+    description: "Cada fila es un caso. Haz clic en uno para ver el detalle, timeline y responder al cliente.",
+    position: "top",
+  },
+];
 
 interface PerfilBasico {
   nombreCorto: string;
@@ -136,7 +164,7 @@ export default function AgentePage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white shadow-sm border-b border-gray-200" data-tour="agente-header">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="font-medium text-sm" style={{ color: perfil?.colores.primario || "#2563EB" }}>
@@ -154,7 +182,7 @@ export default function AgentePage() {
             <h1 className="text-lg font-semibold text-gray-900">Consola {perfil?.nombreCorto || "Agente"}</h1>
             <span className="text-sm text-gray-500">({total} casos)</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" data-tour="view-toggle">
             <button
               onClick={() => setVistaKanban(false)}
               className={`px-3 py-1 text-sm rounded ${!vistaKanban ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600"}`}
@@ -172,7 +200,7 @@ export default function AgentePage() {
       </header>
 
       {/* Filters */}
-      <div className="bg-white border-b border-gray-200 px-4 py-2">
+      <div className="bg-white border-b border-gray-200 px-4 py-2" data-tour="filter-section">
         <div className="max-w-7xl mx-auto flex flex-wrap gap-3 items-center">
           <span className="text-sm text-gray-500 font-medium">Filtros:</span>
           <select
@@ -215,7 +243,7 @@ export default function AgentePage() {
       </div>
 
       {/* Content */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-4">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-4" data-tour="cases-content">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -336,6 +364,7 @@ export default function AgentePage() {
           </>
         )}
       </main>
+      <InteractiveTour tourId="agente" steps={TOUR_STEPS} accentColor={perfil?.colores.primario || "#2563EB"} />
     </div>
   );
 }

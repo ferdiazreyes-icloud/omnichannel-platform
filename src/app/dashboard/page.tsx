@@ -2,6 +2,40 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import InteractiveTour, { type TourStep } from "@/components/tour/InteractiveTour";
+
+const TOUR_STEPS: TourStep[] = [
+  {
+    target: "dash-header",
+    title: "Dashboard del Supervisor",
+    description: "Vista de mando con métricas en tiempo real que se actualizan cada 10 segundos.",
+    position: "bottom",
+  },
+  {
+    target: "dash-alerts",
+    title: "Alertas de SLA",
+    description: "Muestra casos en riesgo o vencidos. Haz clic para ver el detalle de cada alerta.",
+    position: "bottom",
+  },
+  {
+    target: "dash-tabs",
+    title: "Operación vs Negocio",
+    description: "Alterna entre métricas operativas (SLA, carga) y de negocio (CSAT, resolución).",
+    position: "bottom",
+  },
+  {
+    target: "dash-kpis",
+    title: "KPIs principales",
+    description: "Indicadores clave: casos activos, cumplimiento de SLA, tiempos de respuesta.",
+    position: "bottom",
+  },
+  {
+    target: "dash-charts",
+    title: "Gráficos de análisis",
+    description: "Distribución por estado, canal, carga por agente y tendencia de volumen.",
+    position: "top",
+  },
+];
 
 interface PerfilBasico {
   nombreCorto: string;
@@ -156,7 +190,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white shadow-sm border-b border-gray-200" data-tour="dash-header">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="font-medium text-sm" style={{ color: perfil?.colores.primario || "#2563EB" }}>
@@ -180,22 +214,25 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/dashboard/alertas"
+              data-tour="dash-alerts"
               className="text-sm bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-100 font-medium"
             >
               Alertas ({resumen.casosVencidosSLA + resumen.casosEnRiesgoSLA})
             </Link>
-            <button
-              onClick={() => setTab("operacion")}
-              className={`px-3 py-1 text-sm rounded ${tab === "operacion" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600"}`}
-            >
-              Operación
-            </button>
-            <button
-              onClick={() => setTab("negocio")}
-              className={`px-3 py-1 text-sm rounded ${tab === "negocio" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600"}`}
-            >
-              Negocio
-            </button>
+            <div className="flex items-center gap-2" data-tour="dash-tabs">
+              <button
+                onClick={() => setTab("operacion")}
+                className={`px-3 py-1 text-sm rounded ${tab === "operacion" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600"}`}
+              >
+                Operación
+              </button>
+              <button
+                onClick={() => setTab("negocio")}
+                className={`px-3 py-1 text-sm rounded ${tab === "negocio" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600"}`}
+              >
+                Negocio
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -204,7 +241,7 @@ export default function DashboardPage() {
         {tab === "operacion" ? (
           <div className="space-y-4">
             {/* KPIs */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-tour="dash-kpis">
               <KPICard label="Casos activos" value={resumen.casosActivos} color="text-blue-600" />
               <KPICard
                 label="SLA Respuesta"
@@ -223,7 +260,7 @@ export default function DashboardPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4" data-tour="dash-charts">
               {/* Cases by State */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
                 <h3 className="font-semibold text-gray-900 mb-4">Casos por Estado</h3>
@@ -425,6 +462,7 @@ export default function DashboardPage() {
           </div>
         )}
       </main>
+      <InteractiveTour tourId="dashboard" steps={TOUR_STEPS} accentColor={perfil?.colores.primario || "#2563EB"} />
     </div>
   );
 }

@@ -3,6 +3,34 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useWebRTC, type ConnectionState } from "@/hooks/use-webrtc";
 import Link from "next/link";
+import InteractiveTour, { type TourStep } from "@/components/tour/InteractiveTour";
+
+const TOUR_STEPS: TourStep[] = [
+  {
+    target: "voz-header",
+    title: "Asistente de Voz",
+    description: "Canal de atención por voz con IA en tiempo real, usando OpenAI Realtime API.",
+    position: "bottom",
+  },
+  {
+    target: "voz-status",
+    title: "Estado de la llamada",
+    description: "Muestra si estás disponible, conectando o en llamada activa con temporizador.",
+    position: "bottom",
+  },
+  {
+    target: "voz-pulse",
+    title: "Indicador visual",
+    description: "Se anima cuando el asistente está hablando. Pulsa para iniciar o terminar la llamada.",
+    position: "bottom",
+  },
+  {
+    target: "voz-action",
+    title: "Controles de llamada",
+    description: "Inicia la llamada, termínala y crea un caso automáticamente desde la transcripción.",
+    position: "top",
+  },
+];
 
 interface PerfilData {
   activo: string;
@@ -184,7 +212,7 @@ export default function VozPage() {
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: c.fondo }}>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white shadow-sm border-b border-gray-200" data-tour="voz-header">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -207,7 +235,7 @@ export default function VozPage() {
               <p className="text-[11px] text-gray-400">Canal de atención por voz en tiempo real</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" data-tour="voz-status">
             {isActive && callStartTime && <CallTimer startTime={callStartTime} />}
             <StatusBadge state={state} />
             {isSimulation && (
@@ -222,7 +250,9 @@ export default function VozPage() {
       {/* Main */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 gap-6">
         {/* Pulse visualization */}
-        <PulseRing active={isActive} speaking={isAssistantSpeaking} color={c.primario} />
+        <div data-tour="voz-pulse">
+          <PulseRing active={isActive} speaking={isAssistantSpeaking} color={c.primario} />
+        </div>
 
         {/* Status text */}
         <div className="text-center">
@@ -250,7 +280,7 @@ export default function VozPage() {
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3" data-tour="voz-action">
           <button
             onClick={handleToggle}
             disabled={state === "connecting"}
@@ -316,6 +346,8 @@ export default function VozPage() {
           Asistente de Voz — {perfil?.perfil.nombreCorto || "Arena"} &bull; Canal de atención omnicanal
         </div>
       </footer>
+
+      <InteractiveTour tourId="voz" steps={TOUR_STEPS} accentColor={c.primario} />
     </div>
   );
 }
