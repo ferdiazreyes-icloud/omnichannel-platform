@@ -1,0 +1,147 @@
+{
+  "id": "jll",
+  "nombre": "JLL México — Facility Management",
+  "nombreCorto": "JLL",
+  "industria": "Facility Management & Mantenimiento",
+  "descripcion": "JLL gestiona servicios de mantenimiento integral para las principales cadenas y corporativos de México: BBVA, Banorte, Bimbo, Liverpool, Walmart, FEMSA/OXXO, Telefónica y Citibanamex.",
+  "logo": "JLL",
+  "colores": {
+    "primario": "#E30613",
+    "secundario": "#1A1A1A",
+    "acento": "#00A3E0",
+    "fondo": "#FDF5F5"
+  },
+  "canalesHabilitados": ["web", "whatsapp", "voz", "sms"],
+  "intenciones": ["soporte", "solicitud", "seguimiento", "informacion"],
+  "categorias": {
+    "soporte": [
+      "Eléctrico — falla en iluminación o circuitos",
+      "HVAC — aire acondicionado no enfría o no enciende",
+      "Plomería — fuga de agua o drenaje tapado",
+      "Obra Civil — daño en piso, techo o pared",
+      "Cerrajería — cerradura dañada o acceso bloqueado",
+      "Fumigación — plaga detectada en sucursal",
+      "Pintura — deterioro o grafiti en fachada",
+      "Herrería — reja, puerta o estructura metálica dañada"
+    ],
+    "solicitud": [
+      "Nueva OT de mantenimiento preventivo",
+      "Solicitud de remodelación de sucursal",
+      "Instalación de equipo nuevo",
+      "Cambio de luminarias a LED",
+      "Mantenimiento programado de HVAC",
+      "Adecuación de espacios",
+      "Solicitud de fumigación periódica",
+      "Revisión de instalación eléctrica"
+    ],
+    "seguimiento": [
+      "Estado de orden de trabajo (OT)",
+      "Tiempo estimado de resolución",
+      "Confirmación de visita de técnico",
+      "Reprogramación de servicio",
+      "Escalamiento de OT vencida",
+      "Acta de entrega de trabajos",
+      "Reporte fotográfico de avance",
+      "Seguimiento a garantía de servicio"
+    ],
+    "informacion": [
+      "Cobertura de servicios por zona",
+      "SLA por cuenta (BBVA, Walmart, etc.)",
+      "Horarios de atención por región",
+      "Catálogo de servicios disponibles",
+      "Proceso para alta de nueva sucursal",
+      "Tarifas y cotizaciones",
+      "Contacto de coordinador de cuenta",
+      "Protocolo de emergencias"
+    ]
+  },
+  "equipos": [
+    { "nombre": "Mesa de Servicio", "equipo": "mesa_servicio" },
+    { "nombre": "Coordinación de Campo", "equipo": "campo" },
+    { "nombre": "Supervisión de Cuentas", "equipo": "cuentas" },
+    { "nombre": "Emergencias 24/7", "equipo": "emergencias" }
+  ],
+  "agentes": [
+    { "nombre": "Carlos Mendoza", "email": "c.mendoza@jll.com", "equipo": "mesa_servicio" },
+    { "nombre": "Ana Lucía Torres", "email": "al.torres@jll.com", "equipo": "mesa_servicio" },
+    { "nombre": "Roberto Sánchez", "email": "r.sanchez@jll.com", "equipo": "mesa_servicio" },
+    { "nombre": "Diana Herrera", "email": "d.herrera@jll.com", "equipo": "campo" },
+    { "nombre": "Miguel Ángel Ruiz", "email": "ma.ruiz@jll.com", "equipo": "campo" },
+    { "nombre": "Patricia Vega", "email": "p.vega@jll.com", "equipo": "campo" },
+    { "nombre": "Fernando Castillo", "email": "f.castillo@jll.com", "equipo": "cuentas" },
+    { "nombre": "Gabriela Ríos", "email": "g.rios@jll.com", "equipo": "cuentas" },
+    { "nombre": "Javier Ortega", "email": "j.ortega@jll.com", "equipo": "emergencias" },
+    { "nombre": "Laura Domínguez", "email": "l.dominguez@jll.com", "equipo": "emergencias" }
+  ],
+  "conocimiento": {
+    "productos": [
+      "Mantenimiento Eléctrico: Reparación de iluminación, circuitos, tableros, contactos y cableado. Incluye emergencias por corto circuito.",
+      "HVAC: Mantenimiento preventivo y correctivo de aires acondicionados, minisplits, chillers y sistemas de ventilación.",
+      "Plomería: Reparación de fugas, destape de drenajes, cambio de llaves, boilers y tinacos.",
+      "Obra Civil: Reparación de pisos, muros, techos, impermeabilización y trabajos menores de albañilería.",
+      "Cerrajería: Apertura de emergencia, cambio de chapas, instalación de cerraduras y control de accesos.",
+      "Fumigación: Control de plagas (cucarachas, roedores, termitas), fumigación periódica y certificados sanitarios.",
+      "Pintura: Pintura interior/exterior, retoque, señalización y acabados decorativos.",
+      "Herrería: Fabricación y reparación de rejas, puertas metálicas, cortinas metálicas y estructuras."
+    ],
+    "politicas": [
+      "SLA Emergencia (fuga, corto, plaga): Respuesta en sitio máximo 4 horas",
+      "SLA Urgente (sin A/C, sin luz, acceso bloqueado): Respuesta en sitio máximo 8 horas",
+      "SLA Estándar (mantenimiento correctivo): Resolución máximo 48 horas",
+      "SLA Preventivo (mantenimiento programado): Según calendario de cuenta",
+      "Cada OT requiere reporte fotográfico de antes/después",
+      "El coordinador de cuenta valida la entrega de todo servicio",
+      "Garantía de 30 días en mano de obra y 90 días en materiales",
+      "Escalamiento automático si la OT excede el SLA"
+    ],
+    "horarios": "Mesa de Servicio: Lun-Vie 7:00-20:00, Sáb 8:00-14:00. Emergencias: 24/7. Coordinadores de campo: Lun-Sáb 7:00-19:00.",
+    "contacto": "Mesa de Servicio: 800-JLL-MXCO (800-555-6926). WhatsApp: +52 55 4000 0000. Portal: facility.jll.com.mx. Emergencias 24/7: +52 55 4000 0001."
+  },
+  "sla": {
+    "primeraRespuestaMinutos": 15,
+    "resolucionHoras": 48,
+    "prioridadMultiplicador": {
+      "alta": 0.17,
+      "media": 1,
+      "baja": 2
+    }
+  },
+  "tono": "Profesional y orientado a soluciones. Usa 'usted'. Confirma siempre la cuenta/sucursal del cliente. Prioriza seguridad y tiempos de respuesta. Sé conciso y operativo — los facility managers necesitan respuestas rápidas, no fluff.",
+  "mensajesBienvenida": {
+    "web": "Bienvenido a JLL Mesa de Servicio. ¿En qué podemos ayudarle con su sucursal o instalación?",
+    "whatsapp": "JLL Mesa de Servicio. ¿En qué le podemos apoyar? Indique su cuenta y número de sucursal.",
+    "voz": "Gracias por comunicarse a JLL Mesa de Servicio. ¿Con qué cuenta y sucursal nos contacta?",
+    "sms": "JLL Servicio: ¿Cuál es su cuenta, sucursal y tipo de incidencia?"
+  },
+  "mensajesCliente": {
+    "soporte": [
+      "Soy de BBVA sucursal Polanco 214, se fue la luz en toda la sucursal desde las 8am",
+      "Habla el gerente de Liverpool Perisur, el aire acondicionado del piso 2 no enfría y tenemos 35 grados",
+      "Walmart Toreo tiene una fuga de agua en los baños de clientes, ya se está inundando el pasillo",
+      "En Banorte Reforma 222 la puerta principal no cierra, necesitamos cerrajero urgente",
+      "OXXO Naucalpan sur reporta plaga de cucarachas en bodega, necesitamos fumigación urgente",
+      "Citibanamex Santa Fe tiene el techo con goteras en el área de cajas, llovió fuerte anoche"
+    ],
+    "solicitud": [
+      "Necesitamos programar mantenimiento preventivo de HVAC para 15 sucursales BBVA zona norte",
+      "Liverpool quiere cotización para cambio de luminarias a LED en tienda Interlomas",
+      "Walmart requiere remodelación de área de panadería en 3 sucursales de Monterrey",
+      "Grupo Bimbo solicita revisión eléctrica general en planta Azcapotzalco",
+      "Telefónica pide instalación de 20 minisplits en nuevo call center Querétaro"
+    ],
+    "seguimiento": [
+      "¿Cuál es el estatus de la OT-2024-4521 de BBVA Polanco? Ya pasaron 6 horas",
+      "El técnico de cerrajería para Liverpool Perisur no ha llegado, ¿a qué hora viene?",
+      "Necesito el reporte fotográfico de los trabajos de pintura en Walmart Toreo",
+      "La OT de fumigación de OXXO ya venció el SLA, necesito escalar",
+      "¿Ya tienen el acta de entrega de la remodelación de Banorte Centro?"
+    ],
+    "informacion": [
+      "¿Qué servicios cubre JLL para la cuenta de Citibanamex?",
+      "¿Cuál es el SLA de respuesta para emergencias en sucursales Walmart?",
+      "Necesito el contacto del coordinador de cuenta asignado a BBVA zona sur",
+      "¿Cuál es el proceso para dar de alta una nueva sucursal de Liverpool?",
+      "¿Tienen cobertura de servicio en Mérida y Cancún?"
+    ]
+  }
+}

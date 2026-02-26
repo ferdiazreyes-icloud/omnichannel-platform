@@ -3,6 +3,7 @@ import telcoEjemplo from "@/data/perfiles/telco-ejemplo.json";
 import ecommerceEjemplo from "@/data/perfiles/ecommerce-ejemplo.json";
 import megacable from "@/data/perfiles/megacable.json";
 import equiposMedicos from "@/data/perfiles/equipos-medicos.json";
+import jll from "@/data/perfiles/jll.json";
 
 export interface PerfilNegocio {
   id: string;
@@ -40,6 +41,7 @@ export interface PerfilNegocio {
 
 const PERFILES: Record<string, PerfilNegocio> = {
   megacable: megacable as PerfilNegocio,
+  jll: jll as PerfilNegocio,
   "equipos-medicos": equiposMedicos as PerfilNegocio,
   "banco-ejemplo": bancoEjemplo as PerfilNegocio,
   "ecommerce-ejemplo": ecommerceEjemplo as PerfilNegocio,
