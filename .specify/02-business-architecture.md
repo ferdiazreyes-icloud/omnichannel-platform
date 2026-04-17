@@ -2,67 +2,92 @@
 
 ## User Flows
 
-### Flow 1: Customer — Initiates contact via any channel
-1. Customer opens the channel simulator and selects a channel (WhatsApp, SMS, Web Chat, Facebook Messenger)
-2. Customer starts a conversation with the bot
-3. Bot (Claude API) greets, detects intent, and asks clarifying questions (name, subject, urgency)
-4. Bot creates a case in the system with auto-assigned priority and SLA
-5. Customer sees a confirmation screen with their case number and expected response time
+### Flow 1: Sales rep — Sets up the demo for a specific client
+1. Sales rep opens the home page
+2. Selects the company profile matching the prospect (e.g., "Megacable" for a telecom visit)
+3. All bot personas, product knowledge, and greetings update instantly — no reload needed
+4. Sales rep navigates to any view; everything reflects the selected client
 
-### Flow 2: Agent — Works a case from the inbox
-1. Agent opens the case inbox and sees all active cases filtered by status, priority, and SLA risk
-2. Agent opens a case and reviews the full interaction timeline (bot transcript + any prior messages)
-3. Agent sees customer context in the sidebar (segment, prior cases, relevant data)
-4. Agent types a response; the system adapts format to the origin channel (SMS length limit, WhatsApp rich media, etc.)
-5. Agent can add internal notes (not visible to customer), escalate, reassign, or close the case
-6. Agent cannot close a case without documenting a resolution
-7. SLA countdown timer is always visible (green → yellow → red as deadline approaches)
-8. Claude suggests response drafts based on case context and knowledge base
+### Flow 2: Customer (text) — Initiates contact via any channel
+1. Sales rep opens the channel simulator and selects a channel (WhatsApp, SMS, Web Chat, Facebook Messenger)
+2. Customer starts a conversation with the text bot (Claude)
+3. Bot detects intent, asks clarifying questions (name, subject, urgency), using the active company's tone and product knowledge
+4. Bot creates a case with auto-assigned priority and SLA
+5. Customer sees a confirmation screen with case number and expected response time
 
-### Flow 3: Supervisor — Monitors operations in real time
-1. Supervisor opens the operational dashboard and sees live KPIs: open cases by status, SLA compliance rate, avg first-response time, avg resolution time, volume by channel, agent load
-2. Supervisor opens the business dashboard: conversion rate by channel and agent, cost per case, top contact reasons, volume trends
-3. Supervisor checks the alerts view: cases close to SLA breach, overloaded agents, channel anomalies
-4. Dashboard updates in real time via SSE as new cases arrive or statuses change
+### Flow 3: Customer (voice) — Calls via the voice channel
+1. Sales rep opens `/voz`
+2. Clicks "Iniciar llamada" — browser connects via WebRTC to OpenAI Realtime API
+3. Customer speaks naturally; bot responds in real time with the active company's voice persona
+4. Transcription appears on screen in real time
+5. After the call ends, the transcript is saved as a case automatically
 
-### Flow 4: Routing — System auto-assigns cases
+### Flow 4: Agent — Works a case from the inbox
+1. Agent opens the case inbox and sees all active cases filtered by status, priority, and SLA risk (green/yellow/red)
+2. Agent toggles between list and kanban view
+3. Agent opens a case and reviews the full interaction timeline (bot transcript + interactions)
+4. Agent sees customer context in the sidebar
+5. Agent types a response (Claude suggests a draft); the system adapts format to origin channel
+6. Agent can add internal notes, escalate, reassign, or close the case
+7. Agent cannot close a case without documenting a resolution
+8. Dashboard and inbox update in real time via SSE
+
+### Flow 5: Supervisor — Monitors operations in real time
+1. Supervisor opens the operational dashboard (Operación tab): open cases by status, SLA compliance %, avg response time, avg resolution time, volume by channel, agent load
+2. Supervisor opens the business dashboard (Negocio tab): conversion by channel/agent, cost per case, top contact reasons, trends
+3. Supervisor checks the alerts view: cases close to SLA breach, overloaded agents, volume anomalies
+4. Dashboard auto-refreshes every 10 seconds
+
+### Flow 6: Routing — System auto-assigns cases
 1. Bot detects intent and category
-2. Routing engine applies rules: category → specialist agent pool, priority → SLA tier, load balancing → agent with fewest active cases
-3. Fallback: general queue + supervisor alert if no agent matches
+2. Routing engine applies rules: intent → specialist team (ventas/soporte/cobranza/general), priority → SLA tier, load balancing → agent with fewest active cases
+3. Fallback: general pool if no specialist available
+
+### Flow 7: Guided tour — New visitor gets oriented
+1. Visitor opens any page for the first time
+2. Interactive tour overlay highlights key elements with explanations (Krug UX principles)
+3. Visitor can follow the tour or dismiss it
 
 ## Use Cases
 
 | # | Use Case | Actor | Description |
 |---|---|---|---|
-| UC-01 | Select channel and start chat | Customer | Customer picks a channel and begins a bot conversation |
-| UC-02 | Bot detects intent and creates case | Bot (Claude) | Bot identifies intent (sale, support, collections, info), captures minimal data, and creates a case with priority + SLA |
-| UC-03 | View case confirmation | Customer | Customer sees case number and expected response time |
-| UC-04 | View and filter case inbox | Agent | Agent sees all cases, filterable by status, priority, SLA risk |
-| UC-05 | Open and work a case | Agent | Agent reviews timeline, context, and takes action on a case |
-| UC-06 | Reply omnichannel | Agent | Agent sends a response adapted to the origin channel format |
-| UC-07 | Add internal note | Agent | Agent adds a note visible only to the team |
-| UC-08 | Change case status | Agent | Agent moves case through states with validation (can't close without resolution) |
-| UC-09 | View AI response suggestion | Agent | Claude suggests a draft response based on case context |
-| UC-10 | View operational dashboard | Supervisor | Real-time KPIs on case volume, SLA compliance, agent load |
-| UC-11 | View business dashboard | Supervisor | Conversion rates, cost per case, contact reason trends |
-| UC-12 | View alerts | Supervisor | Cases at SLA risk, overloaded agents, volume anomalies |
+| UC-01 | Select company profile | Sales rep | Pick from 6 available clients; all AI prompts and branding update instantly |
+| UC-02 | Select channel and start text chat | Customer | Picks a channel and begins a bot conversation |
+| UC-03 | Bot detects intent and creates case (text) | Bot (Claude) | Identifies intent, captures name + contact + subject, creates case with priority + SLA |
+| UC-04 | Start voice call | Customer | Opens /voz, clicks "Iniciar llamada", speaks with AI voice bot |
+| UC-05 | Bot creates case from transcript (voice) | Bot (OpenAI) | After call ends, transcript is saved as case + interactions |
+| UC-06 | View case confirmation | Customer | Sees case number and expected response time |
+| UC-07 | View and filter case inbox | Agent | Sees all cases, filterable by status, priority, SLA risk; list or kanban |
+| UC-08 | Open and work a case | Agent | Reviews timeline and context, takes action |
+| UC-09 | Reply omnichannel | Agent | Sends response adapted to origin channel format |
+| UC-10 | Add internal note | Agent | Note visible only to team |
+| UC-11 | Change case status | Agent | Moves case through states with validation |
+| UC-12 | View AI response suggestion | Agent | Claude suggests a draft based on case context |
+| UC-13 | View operational dashboard | Supervisor | Real-time KPIs on volume, SLA, agent load |
+| UC-14 | View business dashboard | Supervisor | Conversion, cost per case, contact reason trends |
+| UC-15 | View alerts | Supervisor | SLA at-risk, overloaded agents, anomalies |
+| UC-16 | Follow guided tour | Any | Interactive overlay explains each page |
+| UC-17 | View Command Center demo | Any | End-to-end journey in a single `/demo` page |
 
 ## Business Rules
 
 - A case cannot be closed without a documented resolution
-- SLA timers start at case creation: first-response SLA (default 15 min), resolution SLA (default 24 h)
-- SLA tiers are determined by case priority: high → shorter SLA, low → longer SLA
-- Routing priority: category match → load balance → fallback to general queue
-- Agents cannot see internal notes from other cases — notes are scoped to the case
-- Bot always creates a case, even if the conversation is incomplete (with partial data flagged)
-- Channel format rules: SMS responses ≤ 160 chars; WhatsApp allows rich media; Web and Facebook have no format constraint
+- SLA timers start at case creation: first-response SLA and resolution SLA are set by priority tier
+  - Alta: 8 min first response / 12 h resolution
+  - Media: 15 min / 24 h
+  - Baja: 30 min / 48 h
+- Routing: intent → team (venta→ventas, soporte→soporte, cobranza→cobranza, informacion→general)
+- Load balancing: agent with fewest active cases (estado: nuevo/asignado/en_curso) gets the case
+- Fallback routing: if no specialist available, assign to any active agent
+- Escalation alert: cases escalated after SLA breach (configurable threshold: 5 min past due)
+- Agent overload alert: triggered at 12+ active cases (hard cap at 15)
+- SMS responses are format-constrained (shorter); WhatsApp supports rich text
 
 ## Business Processes
 
-This demo supports three core business processes:
-
-1. **Inbound contact handling:** Any customer message, regardless of channel, is captured, classified, and routed to the right agent pool within SLA. The bot handles the first touch autonomously.
-
-2. **Case lifecycle management:** Every interaction is tracked from creation to resolution. Agents work from a single interface; the system abstracts channel differences. Status transitions have validation rules to ensure data quality.
-
-3. **Operational governance:** Supervisors have real-time visibility into team performance, SLA compliance, and channel health. Alerts surface problems before they breach SLAs.
+1. **Inbound contact handling (text):** Customer message → Claude bot → intent detection → case creation → routing → agent assignment within SLA
+2. **Inbound contact handling (voice):** Browser call → OpenAI Realtime → conversation → auto case creation from transcript → routing
+3. **Case lifecycle management:** Creation → assignment → working → (escalation) → resolution → closure. All transitions validated.
+4. **Operational governance:** Real-time dashboards + alert rules surface SLA risk and agent overload before they become incidents.
+5. **Demo personalization:** Profile selection → AI system prompts updated → all channels reflect the prospect's brand and knowledge base.

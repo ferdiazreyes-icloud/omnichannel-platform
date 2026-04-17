@@ -14,13 +14,18 @@ Define the non-negotiable rules and constraints that guide ALL decisions in this
 | 2 | Monolith over microservices | A single Next.js project handles everything. Splitting services adds complexity without value for a demo. |
 | 3 | Zero external dependencies for data | SQLite only. No PostgreSQL, no Redis, no managed databases. The demo must run with a single `npm run dev`. |
 | 4 | Simulated channels only | No real WhatsApp, Twilio, or Meta integrations. Channels are simulated via adapters with a shared interface. |
-| 5 | AI must be real, not mocked | The conversational bot uses the actual Claude API (Anthropic). This is the core of the demo's value proposition — it must not be faked. |
+| 5 | AI must be real, not mocked | Both the text bot (Claude) and the voice bot (OpenAI Realtime) use real AI APIs. Both have graceful simulation fallbacks when API keys are absent, but the production demo uses real AI. |
 | 6 | No authentication | Single tenant, open access. Auth adds friction to demos and has no value here. |
+| 7 | Right AI for the right job | Claude (Anthropic) handles text conversations — best reasoning and intent detection. OpenAI Realtime API handles voice — only option with native low-latency audio streaming via WebRTC. These are not interchangeable. |
+| 8 | Adaptable to any client | The demo must be reconfigurable per prospect at runtime. Company profiles (JSON) are injected into AI prompts without touching code or redeploying. |
 
 ## Constraints
 
-- **Stack is fixed:** Next.js 15 (App Router) + Tailwind CSS + shadcn/ui + Prisma + SQLite + Claude API
-- **Budget:** Minimal — only cost is Claude API usage (pay-per-token)
-- **Single developer (AI-assisted):** No CI/CD pipeline required; local dev only
+- **Text bot stack:** Anthropic Claude (`claude-sonnet-4-20250514`) via `@anthropic-ai/sdk`
+- **Voice bot stack:** OpenAI Realtime API (`gpt-4o-mini-realtime-preview`) via WebRTC
+- **Database:** SQLite via Prisma — single file, no external DB
+- **Deployment:** Docker on Railway (production) or `npm run dev` (local)
+- **Budget:** Minimal — Claude tokens + OpenAI Realtime minutes per demo session
+- **Single developer (AI-assisted):** No CI/CD pipeline beyond Railway auto-deploy on push
 - **No real customer data:** All data is seeded/simulated. Never use real PII.
-- **Deployment:** Local only for MVP. If needed: Vercel + Turso (SQLite remote) as the simplest path.
+- **Profiles:** 6 company profiles available (Megacable, JLL, MedTech, Banco, Ecommerce, Telco). Adding a new client requires only a new JSON file.
