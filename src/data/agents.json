@@ -1,0 +1,12 @@
+[
+  { "nombre": "María García", "email": "maria.garcia@arena.com", "equipo": "ventas" },
+  { "nombre": "Carlos López", "email": "carlos.lopez@arena.com", "equipo": "ventas" },
+  { "nombre": "Ana Martínez", "email": "ana.martinez@arena.com", "equipo": "soporte" },
+  { "nombre": "Roberto Díaz", "email": "roberto.diaz@arena.com", "equipo": "soporte" },
+  { "nombre": "Laura Hernández", "email": "laura.hernandez@arena.com", "equipo": "soporte" },
+  { "nombre": "Pedro Sánchez", "email": "pedro.sanchez@arena.com", "equipo": "cobranza" },
+  { "nombre": "Sofía Rivera", "email": "sofia.rivera@arena.com", "equipo": "cobranza" },
+  { "nombre": "Diego Torres", "email": "diego.torres@arena.com", "equipo": "general" },
+  { "nombre": "Valentina Cruz", "email": "valentina.cruz@arena.com", "equipo": "general" },
+  { "nombre": "Andrés Morales", "email": "andres.morales@arena.com", "equipo": "ventas" }
+]

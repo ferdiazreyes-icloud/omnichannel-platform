@@ -1,0 +1,134 @@
+{
+  "id": "telco-ejemplo",
+  "nombre": "Conecta Telecom",
+  "nombreCorto": "Conecta",
+  "industria": "Telecomunicaciones",
+  "descripcion": "Operador de telefonía móvil, internet de fibra óptica y televisión por cable.",
+  "logo": "C",
+  "colores": {
+    "primario": "#6D28D9",
+    "secundario": "#8B5CF6",
+    "acento": "#10B981",
+    "fondo": "#F5F3FF"
+  },
+  "canalesHabilitados": ["whatsapp", "web", "facebook", "instagram", "sms", "voz"],
+  "intenciones": ["soporte", "venta", "cobranza", "informacion"],
+  "categorias": {
+    "soporte": [
+      "Sin señal o cobertura",
+      "Internet lento",
+      "Falla en televisión",
+      "Problemas con el router",
+      "Llamadas cortadas",
+      "No puedo enviar SMS"
+    ],
+    "venta": [
+      "Cambio de plan",
+      "Equipo nuevo con plan",
+      "Contratación de fibra óptica",
+      "Paquete Triple Play",
+      "Plan empresarial",
+      "Portabilidad numérica"
+    ],
+    "cobranza": [
+      "Consulta de saldo",
+      "Pago no reflejado",
+      "Factura con cobro indebido",
+      "Reconexión de servicio",
+      "Convenio de pago",
+      "Cancelación por adeudo"
+    ],
+    "informacion": [
+      "Cobertura en mi zona",
+      "Velocidades disponibles",
+      "Requisitos para contratar",
+      "Puntos de pago",
+      "Status de instalación",
+      "Promociones vigentes"
+    ]
+  },
+  "equipos": [
+    { "nombre": "Soporte Técnico", "equipo": "soporte" },
+    { "nombre": "Ventas y Portabilidad", "equipo": "ventas" },
+    { "nombre": "Cobranza", "equipo": "cobranza" },
+    { "nombre": "Atención al Cliente", "equipo": "general" }
+  ],
+  "agentes": [
+    { "nombre": "Gabriela Mendoza", "email": "g.mendoza@conecta.com", "equipo": "soporte" },
+    { "nombre": "Iván Herrera", "email": "i.herrera@conecta.com", "equipo": "soporte" },
+    { "nombre": "Andrea Salazar", "email": "a.salazar@conecta.com", "equipo": "soporte" },
+    { "nombre": "Miguel Paredes", "email": "m.paredes@conecta.com", "equipo": "ventas" },
+    { "nombre": "Valeria Soto", "email": "v.soto@conecta.com", "equipo": "ventas" },
+    { "nombre": "Tomás Guerrero", "email": "t.guerrero@conecta.com", "equipo": "cobranza" },
+    { "nombre": "Diana Peña", "email": "d.pena@conecta.com", "equipo": "cobranza" },
+    { "nombre": "Raúl Espinoza", "email": "r.espinoza@conecta.com", "equipo": "general" },
+    { "nombre": "Carolina Vega", "email": "c.vega@conecta.com", "equipo": "general" },
+    { "nombre": "Arturo Luna", "email": "a.luna@conecta.com", "equipo": "ventas" }
+  ],
+  "conocimiento": {
+    "productos": [
+      "Plan Conecta Básico: 5GB datos + llamadas ilimitadas, $199/mes, velocidad 4G",
+      "Plan Conecta Plus: 15GB datos + redes sociales sin límite, $349/mes, velocidad 5G",
+      "Plan Conecta Max: Datos ilimitados + HBO Max, $549/mes, velocidad 5G+",
+      "Fibra 100: Internet 100 Mbps simétrico, $399/mes, instalación gratis",
+      "Fibra 300: Internet 300 Mbps + TV básica (80 canales), $599/mes",
+      "Triple Play Premium: 500 Mbps + TV HD (150 canales) + línea fija, $899/mes"
+    ],
+    "politicas": [
+      "Soporte técnico remoto: diagnóstico en 30 min, visita técnica en 24-48 hrs",
+      "Portabilidad: se completa en 24 horas hábiles",
+      "Cancelación: sin penalización después de 12 meses de contrato",
+      "Garantía de equipo: 12 meses por defectos de fábrica"
+    ],
+    "horarios": "Call center: 24/7. Tiendas: Lun-Sáb 10:00-20:00, Dom 11:00-17:00. Chat y WhatsApp: 24/7.",
+    "contacto": "Marca *611 desde tu Conecta. Línea fija: 800-CONECTA (266-3282). WhatsApp: +52 55 9876 5432."
+  },
+  "sla": {
+    "primeraRespuestaMinutos": 8,
+    "resolucionHoras": 12,
+    "prioridadMultiplicador": {
+      "alta": 0.5,
+      "media": 1,
+      "baja": 2
+    }
+  },
+  "tono": "Joven, cercano y directo. Usa 'tú'. Sé empático con problemas de servicio que afectan el día a día del cliente. Ofrece soluciones concretas rápidamente.",
+  "mensajesBienvenida": {
+    "whatsapp": "¡Hola! Soy el asistente de Conecta Telecom. ¿En qué te ayudo hoy?",
+    "web": "¡Bienvenido a Conecta! Cuéntame, ¿qué necesitas?",
+    "facebook": "¡Hola! Gracias por escribirnos. ¿Cómo te puedo ayudar?",
+    "instagram": "¡Hey! Bienvenido a Conecta. ¿En qué te echo la mano?",
+    "sms": "Conecta: ¿En qué te ayudamos?",
+    "voz": "Gracias por llamar a Conecta Telecom. ¿En qué puedo ayudarte?"
+  },
+  "mensajesCliente": {
+    "soporte": [
+      "No tengo señal desde hace 2 horas, estoy en zona centro",
+      "Mi internet está súper lento, contraté 300 megas y apenas me llegan 50",
+      "La televisión se congela cada rato y se pixelea",
+      "Mi router no prende la luz de internet desde anoche",
+      "Se me cortan las llamadas a cada rato"
+    ],
+    "venta": [
+      "Quiero cambiarme de compañía, ¿qué planes tienen?",
+      "Me interesa el iPhone 15 con plan, ¿cuánto queda mensual?",
+      "Quiero contratar fibra óptica para mi casa",
+      "¿Tienen algún paquete con Netflix incluido?",
+      "Necesito un plan empresarial para 20 líneas"
+    ],
+    "cobranza": [
+      "Pagué mi recibo en OXXO ayer y sigue cortado el servicio",
+      "Me cobraron doble este mes, necesito aclaración",
+      "Necesito un convenio de pago, tengo 2 meses atrasados",
+      "¿Dónde puedo pagar? No encuentro puntos cerca",
+      "Quiero mi factura del mes pasado"
+    ],
+    "informacion": [
+      "¿Ya tienen 5G en Monterrey?",
+      "¿Cuál es la velocidad real del plan de 300 megas?",
+      "¿Qué necesito para contratar la fibra óptica?",
+      "¿Cuándo es la fecha de pago de mi servicio?",
+      "¿Tienen alguna promoción de Buen Fin?"
+    ]
+  }
+}

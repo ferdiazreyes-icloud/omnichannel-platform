@@ -1,0 +1,132 @@
+{
+  "id": "ecommerce-ejemplo",
+  "nombre": "Nova Commerce",
+  "nombreCorto": "Nova",
+  "industria": "E-Commerce",
+  "descripcion": "Tienda en línea de moda, electrónica y hogar con entregas en todo México.",
+  "logo": "N",
+  "colores": {
+    "primario": "#E11D48",
+    "secundario": "#FB7185",
+    "acento": "#0EA5E9",
+    "fondo": "#FFF1F2"
+  },
+  "canalesHabilitados": ["whatsapp", "web", "instagram", "facebook"],
+  "intenciones": ["soporte", "venta", "cobranza", "informacion"],
+  "categorias": {
+    "soporte": [
+      "Pedido no entregado",
+      "Producto dañado",
+      "Talla incorrecta",
+      "Devolución y reembolso",
+      "Producto diferente al mostrado",
+      "Error en dirección de envío"
+    ],
+    "venta": [
+      "Disponibilidad de producto",
+      "Asesoría de talla",
+      "Pedido mayoreo",
+      "Gift card corporativa",
+      "Código de descuento no aplica",
+      "Pre-venta de producto"
+    ],
+    "cobranza": [
+      "Cargo duplicado",
+      "Reembolso no recibido",
+      "Problema con pago MSI",
+      "Facturación",
+      "Error en monto cobrado",
+      "Disputa de cargo"
+    ],
+    "informacion": [
+      "Tiempo de envío",
+      "Política de devoluciones",
+      "Métodos de pago aceptados",
+      "Rastreo de pedido",
+      "Programa de lealtad",
+      "Tallas y medidas"
+    ]
+  },
+  "equipos": [
+    { "nombre": "Post-venta", "equipo": "soporte" },
+    { "nombre": "Asesores de Compra", "equipo": "ventas" },
+    { "nombre": "Pagos y Facturación", "equipo": "cobranza" },
+    { "nombre": "Atención General", "equipo": "general" }
+  ],
+  "agentes": [
+    { "nombre": "Mariana Torres", "email": "m.torres@novacommerce.com", "equipo": "soporte" },
+    { "nombre": "Santiago Ruiz", "email": "s.ruiz@novacommerce.com", "equipo": "soporte" },
+    { "nombre": "Camila Vargas", "email": "c.vargas@novacommerce.com", "equipo": "soporte" },
+    { "nombre": "Andrés Mora", "email": "a.mora@novacommerce.com", "equipo": "ventas" },
+    { "nombre": "Isabella Cruz", "email": "i.cruz@novacommerce.com", "equipo": "ventas" },
+    { "nombre": "Mateo Herrera", "email": "m.herrera@novacommerce.com", "equipo": "cobranza" },
+    { "nombre": "Renata Solis", "email": "r.solis@novacommerce.com", "equipo": "cobranza" },
+    { "nombre": "Sebastián Ávila", "email": "s.avila@novacommerce.com", "equipo": "general" },
+    { "nombre": "Luciana Méndez", "email": "l.mendez@novacommerce.com", "equipo": "general" },
+    { "nombre": "Emiliano Ortiz", "email": "e.ortiz@novacommerce.com", "equipo": "ventas" }
+  ],
+  "conocimiento": {
+    "productos": [
+      "Envío estándar: 3-5 días hábiles, gratis en compras mayores a $799",
+      "Envío express: 24-48 horas, costo $149, gratis en compras mayores a $2,000",
+      "Categorías: Moda (ropa, calzado, accesorios), Electrónica (smartphones, laptops, audio), Hogar (decoración, cocina, jardín)",
+      "Programa Nova Points: 1 punto por cada $10 de compra, 500 puntos = $50 de descuento",
+      "Nova Premium: Membresía $499/año, envío express gratis, acceso anticipado a ventas, devoluciones gratuitas",
+      "Meses sin intereses: 3, 6, 9 y 12 MSI con tarjetas participantes en compras mayores a $1,500"
+    ],
+    "politicas": [
+      "Devoluciones: 30 días naturales, producto sin usar con etiquetas. Reembolso en 5-10 días hábiles",
+      "Garantía electrónica: 1 año por defectos de fábrica, gestión directa con Nova",
+      "Cambio de talla: Sin costo, sujeto a disponibilidad, envío gratis del cambio",
+      "Cancelación de pedido: Posible antes de que el pedido sea enviado"
+    ],
+    "horarios": "Chat y WhatsApp: Lun-Dom 8:00-22:00. Instagram y Facebook: Lun-Vie 9:00-18:00.",
+    "contacto": "WhatsApp: +52 55 4567 8901. Email: hola@novacommerce.com. Instagram: @novacommerce_mx."
+  },
+  "sla": {
+    "primeraRespuestaMinutos": 5,
+    "resolucionHoras": 18,
+    "prioridadMultiplicador": {
+      "alta": 0.5,
+      "media": 1,
+      "baja": 2
+    }
+  },
+  "tono": "Amigable, dinámico y entusiasta. Usa 'tú'. Sé proactivo ofreciendo alternativas. Usa lenguaje de moda y tendencia cuando aplique. Siempre busca que el cliente quede contento.",
+  "mensajesBienvenida": {
+    "whatsapp": "¡Hola! Bienvenido a Nova Commerce. ¿En qué te puedo ayudar hoy?",
+    "web": "¡Hey! Bienvenido a Nova. ¿Buscas algo en especial o necesitas ayuda con un pedido?",
+    "instagram": "¡Hola! Gracias por escribirnos. ¿Qué onda, en qué te ayudo?",
+    "facebook": "¡Hola! Bienvenido a Nova Commerce. Cuéntame, ¿en qué te echo la mano?"
+  },
+  "mensajesCliente": {
+    "soporte": [
+      "Mi pedido debió llegar hace 3 días y sigue sin aparecer",
+      "Me llegó el producto roto, el empaque estaba dañado",
+      "Pedí talla M y me llegó una L, necesito el cambio",
+      "Quiero devolver unos tenis, no me quedaron como esperaba",
+      "El producto que recibí no es el mismo que vi en la foto"
+    ],
+    "venta": [
+      "¿Tienen disponible el iPhone 15 Pro en color titanio?",
+      "¿Cómo funciona la guía de tallas para zapatos?",
+      "Quiero comprar 50 playeras corporativas, ¿manejan mayoreo?",
+      "Tengo un código de descuento NOVA20 pero no me deja aplicarlo",
+      "¿Cuándo sale la nueva colección de invierno?"
+    ],
+    "cobranza": [
+      "Me cobraron dos veces el mismo pedido",
+      "Hice una devolución hace 2 semanas y no me han reembolsado",
+      "No me deja pagar a meses sin intereses con mi tarjeta BBVA",
+      "Necesito mi factura del pedido #NOV-45892",
+      "Me cobraron $2,500 pero el precio era $1,999"
+    ],
+    "informacion": [
+      "¿Cuánto tarda en llegar un pedido a Guadalajara?",
+      "¿Puedo devolver un producto que ya usé?",
+      "¿Aceptan PayPal?",
+      "¿Dónde puedo rastrear mi pedido?",
+      "¿Cómo funciona el programa de Nova Points?"
+    ]
+  }
+}

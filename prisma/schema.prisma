@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Agente {
+  id           String   @id @default(uuid())
+  nombre       String
+  email        String   @unique
+  equipo       String   // ventas | soporte | cobranza | general
+  activo       Boolean  @default(true)
+  casos        Caso[]
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("agentes")
+}
+
+model Caso {
+  id                    String        @id @default(uuid())
+  numeroCaso            String        @unique @map("numero_caso")
+  canalOrigen           String        @map("canal_origen") // whatsapp | sms | web | facebook | instagram | voz
+  clienteNombre         String        @map("cliente_nombre")
+  clienteContacto       String        @map("cliente_contacto")
+  intencion             String        // venta | soporte | cobranza | informacion
+  categoria             String
+  prioridad             String        // alta | media | baja
+  estado                String        @default("nuevo") // nuevo | asignado | en_curso | escalado | resuelto | cerrado
+  resumen               String?
+  slaPrimeraRespuesta   DateTime?     @map("sla_primera_respuesta")
+  slaResolucion         DateTime?     @map("sla_resolucion")
+  primeraRespuestaAt    DateTime?     @map("primera_respuesta_at")
+  resolvedAt            DateTime?     @map("resolved_at")
+  csat                  Int?          // 1-5
+  agenteId              String?       @map("agente_id")
+  agente                Agente?       @relation(fields: [agenteId], references: [id])
+  interacciones         Interaccion[]
+  createdAt             DateTime      @default(now()) @map("created_at")
+  updatedAt             DateTime      @updatedAt @map("updated_at")
+
+  @@map("casos")
+}
+
+model Interaccion {
+  id        String   @id @default(uuid())
+  tipo      String   // bot | agente | sistema | cliente
+  contenido String
+  canal     String
+  casoId    String   @map("caso_id")
+  caso      Caso     @relation(fields: [casoId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("interacciones")
+}

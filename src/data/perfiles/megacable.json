@@ -1,0 +1,145 @@
+{
+  "id": "megacable",
+  "nombre": "Megacable",
+  "nombreCorto": "Megacable",
+  "industria": "Cable, Internet y Telefonía",
+  "descripcion": "Empresa líder en servicios de televisión por cable, internet de alta velocidad y telefonía fija en México.",
+  "logo": "MG",
+  "colores": {
+    "primario": "#003DA5",
+    "secundario": "#0066CC",
+    "acento": "#FF6B00",
+    "fondo": "#F0F5FF"
+  },
+  "canalesHabilitados": ["whatsapp", "web", "facebook", "voz", "sms"],
+  "intenciones": ["soporte", "venta", "cobranza", "informacion"],
+  "categorias": {
+    "soporte": [
+      "Sin servicio de internet",
+      "Televisión sin señal",
+      "Velocidad de internet baja",
+      "Falla en telefonía fija",
+      "Modem no enciende",
+      "Canales congelados o pixeleados",
+      "WiFi no llega a toda la casa",
+      "Error en decodificador"
+    ],
+    "venta": [
+      "Contratación de Mega Internet",
+      "Paquete Mega Doble Play",
+      "Paquete Mega Triple Play",
+      "Upgrade de velocidad",
+      "Mega Empresarial",
+      "Xview (streaming)",
+      "Canales premium (HBO, Star)",
+      "Internet simétrico"
+    ],
+    "cobranza": [
+      "Consulta de estado de cuenta",
+      "Pago no aplicado",
+      "Reconexión de servicio",
+      "Facturación electrónica",
+      "Cobro indebido",
+      "Convenio de pago",
+      "Descuento por pagos puntuales",
+      "Cargo por reconexión"
+    ],
+    "informacion": [
+      "Cobertura en mi colonia",
+      "Fecha de instalación",
+      "Puntos de pago cercanos",
+      "Promociones vigentes",
+      "Horario de servicio técnico",
+      "Requisitos para contratar",
+      "Status de reporte técnico",
+      "Programa Mega Recompensas"
+    ]
+  },
+  "equipos": [
+    { "nombre": "Soporte Técnico", "equipo": "soporte" },
+    { "nombre": "Ventas", "equipo": "ventas" },
+    { "nombre": "Cobranza y Facturación", "equipo": "cobranza" },
+    { "nombre": "Atención al Cliente", "equipo": "general" }
+  ],
+  "agentes": [
+    { "nombre": "Luis Ramírez", "email": "l.ramirez@megacable.com.mx", "equipo": "soporte" },
+    { "nombre": "Sofía Castañeda", "email": "s.castaneda@megacable.com.mx", "equipo": "soporte" },
+    { "nombre": "Héctor Domínguez", "email": "h.dominguez@megacable.com.mx", "equipo": "soporte" },
+    { "nombre": "Paola Guerrero", "email": "p.guerrero@megacable.com.mx", "equipo": "ventas" },
+    { "nombre": "Rodrigo Silva", "email": "r.silva@megacable.com.mx", "equipo": "ventas" },
+    { "nombre": "Daniela Orozco", "email": "d.orozco@megacable.com.mx", "equipo": "ventas" },
+    { "nombre": "Francisco Arias", "email": "f.arias@megacable.com.mx", "equipo": "cobranza" },
+    { "nombre": "Leticia Cabrera", "email": "l.cabrera@megacable.com.mx", "equipo": "cobranza" },
+    { "nombre": "Jorge Maldonado", "email": "j.maldonado@megacable.com.mx", "equipo": "general" },
+    { "nombre": "Adriana Reyes", "email": "a.reyes@megacable.com.mx", "equipo": "general" }
+  ],
+  "conocimiento": {
+    "productos": [
+      "Mega Internet 100: 100 Mbps de bajada, $349/mes, incluye modem WiFi 5",
+      "Mega Internet 200: 200 Mbps de bajada, $449/mes, incluye modem WiFi 6",
+      "Mega Internet 500: 500 Mbps simétrico, $699/mes, WiFi 6 + extensor mesh",
+      "Doble Play (Internet 200 + TV): 90+ canales HD + 200 Mbps, $599/mes",
+      "Triple Play (Internet 200 + TV + Tel): 90+ canales + 200 Mbps + línea fija ilimitada, $699/mes",
+      "Xview: Plataforma streaming incluida en paquetes de TV, +7,000 contenidos on demand",
+      "Canales Premium: HBO $99/mes, Star Premium $149/mes, o combo $199/mes",
+      "Mega Empresarial: Internet dedicado desde 50 Mbps, SLA 99.9%, soporte prioritario"
+    ],
+    "politicas": [
+      "Visita técnica: Sin costo si la falla es del servicio. Costo de $350 si la falla es del equipo del cliente",
+      "Tiempo de atención técnica: 24 hrs en zona urbana, 48 hrs en zona rural",
+      "Cancelación: Sin penalización después de 18 meses. Antes: costo proporcional restante",
+      "Reactivación por falta de pago: Se restaura en máximo 4 horas después del pago",
+      "Garantía de velocidad: Mínimo 70% de la velocidad contratada vía cable ethernet"
+    ],
+    "horarios": "Call center: Lun-Dom 7:00-22:00. Centros de atención: Lun-Vie 9:00-18:00, Sáb 9:00-14:00. Soporte técnico: 24/7 para fallas masivas.",
+    "contacto": "Marca al 01-800-MEGACABLE (634-2222). WhatsApp: +52 33 3000 0000. App: Mi Megacable. Web: megacable.com.mx/mi-cuenta."
+  },
+  "sla": {
+    "primeraRespuestaMinutos": 10,
+    "resolucionHoras": 24,
+    "prioridadMultiplicador": {
+      "alta": 0.4,
+      "media": 1,
+      "baja": 2
+    }
+  },
+  "tono": "Amigable pero profesional. Usa 'tú'. Sé empático con problemas de servicio (internet, TV) que afectan la vida diaria. Ofrece diagnósticos rápidos y soluciones claras con tiempos de respuesta.",
+  "mensajesBienvenida": {
+    "whatsapp": "¡Hola! Bienvenido a Megacable. Soy tu asistente virtual. ¿En qué puedo ayudarte?",
+    "web": "¡Bienvenido a Megacable! ¿En qué te puedo apoyar hoy?",
+    "facebook": "¡Hola! Gracias por contactar a Megacable. ¿Cómo te puedo ayudar?",
+    "voz": "Gracias por llamar a Megacable. ¿En qué te podemos ayudar?",
+    "sms": "Megacable: ¿En qué te ayudamos?"
+  },
+  "mensajesCliente": {
+    "soporte": [
+      "No tengo internet desde las 6 de la mañana, ya reinicié el modem",
+      "Mi televisión dice 'sin señal' en todos los canales",
+      "Contraté 200 megas pero me llegan máximo 40, hice prueba con speedtest",
+      "El modem prende todas las luces menos la de internet",
+      "Mi decodificador se quedó congelado y no responde al control",
+      "El WiFi no llega al cuarto de arriba, ¿pueden poner un extensor?"
+    ],
+    "venta": [
+      "¿Qué planes de internet tienen? Me quiero cambiar de Telmex",
+      "Quiero agregar HBO a mi paquete de televisión",
+      "¿Tienen fibra óptica en la colonia Providencia de Guadalajara?",
+      "Me interesa el Triple Play pero con 500 megas, ¿cuánto sale?",
+      "Necesito internet empresarial para mi oficina, somos 30 personas"
+    ],
+    "cobranza": [
+      "Pagué mi recibo ayer en Elektra y me siguen marcando como deudor",
+      "Me cortaron el servicio pero mi pago ya está hecho",
+      "Necesito mi factura de enero, no la encuentro en la app",
+      "Me están cobrando un canal premium que nunca contraté",
+      "Llevo 3 meses atrasado, ¿puedo hacer un convenio?"
+    ],
+    "informacion": [
+      "¿Ya tienen servicio en la colonia Las Águilas?",
+      "¿Cuándo me van a instalar? Llevo 5 días esperando",
+      "¿Dónde puedo pagar mi recibo cerca de Zapopan?",
+      "¿Qué incluye el Xview? ¿Es como Netflix?",
+      "¿Cuándo se acaba la promoción del Triple Play?"
+    ]
+  }
+}

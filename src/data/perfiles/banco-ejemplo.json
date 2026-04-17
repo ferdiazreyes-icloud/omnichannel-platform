@@ -1,0 +1,132 @@
+{
+  "id": "banco-ejemplo",
+  "nombre": "Banco Meridian",
+  "nombreCorto": "Meridian",
+  "industria": "Servicios Financieros",
+  "descripcion": "Banco comercial con servicios de banca personal, empresarial, crédito y seguros.",
+  "logo": "M",
+  "colores": {
+    "primario": "#1B4F72",
+    "secundario": "#2E86C1",
+    "acento": "#F39C12",
+    "fondo": "#F0F4F8"
+  },
+  "canalesHabilitados": ["whatsapp", "web", "voz", "sms"],
+  "intenciones": ["soporte", "cobranza", "informacion", "venta"],
+  "categorias": {
+    "soporte": [
+      "Bloqueo de tarjeta",
+      "Transferencia no procesada",
+      "Error en banca en línea",
+      "Problema con token digital",
+      "Cajero no dispensó efectivo",
+      "Cargo no reconocido"
+    ],
+    "cobranza": [
+      "Consulta de saldo de crédito",
+      "Solicitud de estado de cuenta",
+      "Pago no aplicado",
+      "Reestructura de deuda",
+      "Condonación de intereses",
+      "Aclaración de cargo"
+    ],
+    "informacion": [
+      "Apertura de cuenta",
+      "Requisitos de crédito hipotecario",
+      "Tasas de interés vigentes",
+      "Horarios de sucursal",
+      "Beneficios de tarjeta Platinum",
+      "Programa de puntos"
+    ],
+    "venta": [
+      "Solicitud de tarjeta de crédito",
+      "Crédito automotriz",
+      "Crédito hipotecario",
+      "Seguro de vida",
+      "Inversión a plazo fijo",
+      "Cuenta empresarial"
+    ]
+  },
+  "equipos": [
+    { "nombre": "Mesa de Control", "equipo": "soporte" },
+    { "nombre": "Cobranza", "equipo": "cobranza" },
+    { "nombre": "Banca Personal", "equipo": "ventas" },
+    { "nombre": "Atención General", "equipo": "general" }
+  ],
+  "agentes": [
+    { "nombre": "Alejandra Ríos", "email": "a.rios@meridian.com", "equipo": "soporte" },
+    { "nombre": "Marco Villanueva", "email": "m.villanueva@meridian.com", "equipo": "soporte" },
+    { "nombre": "Paola Estrada", "email": "p.estrada@meridian.com", "equipo": "soporte" },
+    { "nombre": "Ricardo Fuentes", "email": "r.fuentes@meridian.com", "equipo": "cobranza" },
+    { "nombre": "Fernanda Lara", "email": "f.lara@meridian.com", "equipo": "cobranza" },
+    { "nombre": "Daniel Ibarra", "email": "d.ibarra@meridian.com", "equipo": "ventas" },
+    { "nombre": "Lorena Campos", "email": "l.campos@meridian.com", "equipo": "ventas" },
+    { "nombre": "Sergio Montoya", "email": "s.montoya@meridian.com", "equipo": "ventas" },
+    { "nombre": "Karla Duarte", "email": "k.duarte@meridian.com", "equipo": "general" },
+    { "nombre": "Emilio Navarro", "email": "e.navarro@meridian.com", "equipo": "general" }
+  ],
+  "conocimiento": {
+    "productos": [
+      "Tarjeta Meridian Platinum: Línea desde $50,000, 2 puntos por dólar, seguro de viaje incluido, anualidad $2,500",
+      "Tarjeta Meridian Gold: Línea desde $20,000, 1 punto por dólar, anualidad $1,200",
+      "Crédito Hipotecario: Tasa desde 9.5% anual, plazos 10-20 años, financiamiento hasta 90% del valor",
+      "Crédito Automotriz: Tasa desde 11.9%, plazos 12-60 meses, sin comisión por apertura",
+      "Cuenta Meridian Plus: Sin comisión por manejo con saldo promedio de $10,000, rendimiento 4.5% anual",
+      "Inversión a Plazo: Desde $50,000, plazos 28-360 días, rendimiento hasta 11.2% anual"
+    ],
+    "politicas": [
+      "Bloqueo de tarjeta: inmediato por app, teléfono 24/7 o sucursal",
+      "Aclaraciones: plazo de 90 días naturales según CONDUSEF",
+      "Reposición de tarjeta: 5 días hábiles, sin costo primera vez",
+      "Límite de transferencias SPEI: $50,000 diarios en banca en línea"
+    ],
+    "horarios": "Sucursales: Lun-Vie 9:00-16:00. Banca por teléfono: 24/7. Chat: Lun-Dom 7:00-23:00.",
+    "contacto": "Línea directa: 800-MERIDIAN (637-4342). WhatsApp: +52 55 1234 5678."
+  },
+  "sla": {
+    "primeraRespuestaMinutos": 10,
+    "resolucionHoras": 24,
+    "prioridadMultiplicador": {
+      "alta": 0.5,
+      "media": 1,
+      "baja": 2
+    }
+  },
+  "tono": "Formal y confiable. Usa 'usted' en lugar de 'tú'. Transmite seguridad y profesionalismo bancario. Nunca compartas información sensible del cliente.",
+  "mensajesBienvenida": {
+    "whatsapp": "Bienvenido a Banco Meridian. Soy su asistente virtual. ¿En qué puedo ayudarle hoy?",
+    "web": "Bienvenido al chat de Banco Meridian. Estoy aquí para asistirle con sus consultas bancarias.",
+    "voz": "Gracias por llamar a Banco Meridian. ¿En qué podemos servirle?",
+    "sms": "Banco Meridian: ¿En qué podemos ayudarle?"
+  },
+  "mensajesCliente": {
+    "soporte": [
+      "Mi tarjeta fue bloqueada y no puedo hacer compras",
+      "Hice una transferencia hace 2 horas y no ha llegado",
+      "No puedo entrar a la banca en línea, me dice contraseña incorrecta",
+      "El cajero no me dio el dinero pero sí descontó de mi cuenta",
+      "Vi un cargo de $3,500 que no reconozco en mi estado de cuenta"
+    ],
+    "cobranza": [
+      "Quiero saber cuánto debo de mi tarjeta de crédito",
+      "Hice un pago en OXXO hace 3 días y no se refleja",
+      "Necesito reestructurar mi deuda porque perdí mi empleo",
+      "Me están cobrando intereses que no corresponden",
+      "Necesito mi estado de cuenta de los últimos 3 meses"
+    ],
+    "informacion": [
+      "¿Qué necesito para abrir una cuenta de nómina?",
+      "¿Cuáles son las tasas actuales para crédito hipotecario?",
+      "¿Cuántos puntos tengo acumulados en mi tarjeta Platinum?",
+      "¿A qué hora abren la sucursal de Polanco?",
+      "¿Qué beneficios tiene la tarjeta Gold?"
+    ],
+    "venta": [
+      "Me interesa una tarjeta de crédito con beneficios de viaje",
+      "Quiero información del crédito automotriz",
+      "Necesito un crédito hipotecario para una casa de 3 millones",
+      "¿Tienen alguna promoción para inversiones a plazo fijo?",
+      "Quiero abrir una cuenta para mi empresa"
+    ]
+  }
+}

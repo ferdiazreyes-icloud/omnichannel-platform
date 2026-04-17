@@ -1,0 +1,149 @@
+{
+  "id": "equipos-medicos",
+  "nombre": "MedTech Solutions",
+  "nombreCorto": "MedTech",
+  "industria": "Equipos Médicos Especializados",
+  "descripcion": "Distribuidor y proveedor de equipos médicos especializados para hospitales, clínicas y consultorios en Latinoamérica.",
+  "logo": "MT",
+  "colores": {
+    "primario": "#0F766E",
+    "secundario": "#14B8A6",
+    "acento": "#3B82F6",
+    "fondo": "#F0FDFA"
+  },
+  "canalesHabilitados": ["whatsapp", "web", "voz", "sms"],
+  "intenciones": ["venta", "soporte", "informacion", "cobranza"],
+  "categorias": {
+    "venta": [
+      "Cotización de equipo",
+      "Licitación pública/privada",
+      "Renovación de equipo",
+      "Equipamiento de nueva clínica",
+      "Demo de equipo en sitio",
+      "Leasing de equipo médico",
+      "Accesorios y consumibles",
+      "Equipo reacondicionado"
+    ],
+    "soporte": [
+      "Equipo fuera de servicio",
+      "Mantenimiento preventivo",
+      "Calibración requerida",
+      "Error en software del equipo",
+      "Refacción urgente",
+      "Capacitación de uso",
+      "Instalación de equipo nuevo",
+      "Actualización de firmware"
+    ],
+    "informacion": [
+      "Ficha técnica de equipo",
+      "Certificaciones COFEPRIS",
+      "Registro sanitario",
+      "Comparativa de modelos",
+      "Condiciones de garantía",
+      "Requisitos de instalación",
+      "Especificaciones eléctricas",
+      "Cursos de capacitación"
+    ],
+    "cobranza": [
+      "Estado de cuenta",
+      "Facturación para licitación",
+      "Pago a crédito 30/60/90 días",
+      "Orden de compra pendiente",
+      "Complemento de pago",
+      "Nota de crédito",
+      "Conciliación de pagos",
+      "Factura para reembolso IMSS/ISSSTE"
+    ]
+  },
+  "equipos": [
+    { "nombre": "Ingeniería Biomédica", "equipo": "soporte" },
+    { "nombre": "Ventas Hospitalarias", "equipo": "ventas" },
+    { "nombre": "Administración y Cobranza", "equipo": "cobranza" },
+    { "nombre": "Atención a Clientes", "equipo": "general" }
+  ],
+  "agentes": [
+    { "nombre": "Ing. Patricia Valdés", "email": "p.valdes@medtech.com.mx", "equipo": "soporte" },
+    { "nombre": "Ing. Roberto Aguilar", "email": "r.aguilar@medtech.com.mx", "equipo": "soporte" },
+    { "nombre": "Ing. Diana Ramos", "email": "d.ramos@medtech.com.mx", "equipo": "soporte" },
+    { "nombre": "Lic. Fernando Delgado", "email": "f.delgado@medtech.com.mx", "equipo": "ventas" },
+    { "nombre": "Lic. Mónica Peña", "email": "m.pena@medtech.com.mx", "equipo": "ventas" },
+    { "nombre": "Lic. Arturo Cisneros", "email": "a.cisneros@medtech.com.mx", "equipo": "ventas" },
+    { "nombre": "CPA Laura Figueroa", "email": "l.figueroa@medtech.com.mx", "equipo": "cobranza" },
+    { "nombre": "CPA Miguel Contreras", "email": "m.contreras@medtech.com.mx", "equipo": "cobranza" },
+    { "nombre": "Lic. Verónica Sandoval", "email": "v.sandoval@medtech.com.mx", "equipo": "general" },
+    { "nombre": "Lic. Enrique Mejía", "email": "e.mejia@medtech.com.mx", "equipo": "general" }
+  ],
+  "conocimiento": {
+    "productos": [
+      "Ultrasonido GE Voluson E10: Equipo premium para ginecología/obstetricia, imagen 4D, desde $1,850,000 MXN",
+      "Tomógrafo Siemens SOMATOM go.Up: 32 cortes, bajo consumo, ideal para clínicas medianas, desde $8,500,000 MXN",
+      "Monitor de signos vitales Mindray ePM-12M: 7 parámetros, pantalla 12\", conectividad HL7, desde $45,000 MXN",
+      "Ventilador mecánico Dräger Savina 300: UCI/UCIN, modos avanzados, desde $520,000 MXN",
+      "Mesa quirúrgica Maquet Magnus: Electro-hidráulica, posicionamiento de carbono, desde $890,000 MXN",
+      "Autoclave Tuttnauer 3870EA: 85L, ciclo rápido 15 min, validación automática, desde $185,000 MXN",
+      "Electrocardiógrafo Nihon Kohden ECG-2550: 12 canales, interpretación automática, desde $68,000 MXN",
+      "Consumibles: Electrodos, papel térmico, gel de ultrasonido, baterías, sensores SpO2"
+    ],
+    "politicas": [
+      "Garantía estándar: 12 meses en equipo nuevo, 6 meses en reacondicionado",
+      "Mantenimiento preventivo: Incluido el primer año, después contrato anual disponible",
+      "Tiempo de respuesta por falla: 4 hrs en CDMX/Monterrey/Guadalajara, 24 hrs resto del país",
+      "Refacciones: Stock en CDMX para marcas principales. Importación especial 2-4 semanas",
+      "Capacitación: Incluida en la compra. 2 sesiones de 4 hrs para personal médico y biomédico",
+      "Instalación: Incluida en equipo mayor. Requiere cumplimiento de especificaciones eléctricas y de espacio",
+      "Crédito: 30/60/90 días para hospitales con historial. Licitaciones según bases"
+    ],
+    "horarios": "Ventas: Lun-Vie 9:00-18:00. Soporte técnico: Lun-Vie 8:00-20:00, Sáb 9:00-14:00. Emergencias equipos críticos: 24/7.",
+    "contacto": "Oficina CDMX: (55) 5555-1234. Monterrey: (81) 8888-5678. WhatsApp Ventas: +52 55 2345 6789. Soporte: soporte@medtech.com.mx."
+  },
+  "sla": {
+    "primeraRespuestaMinutos": 20,
+    "resolucionHoras": 48,
+    "prioridadMultiplicador": {
+      "alta": 0.25,
+      "media": 1,
+      "baja": 2
+    }
+  },
+  "tono": "Profesional y técnico. Usa 'usted'. Demuestra conocimiento de equipamiento médico. Sé preciso con especificaciones técnicas. Las fallas en equipos médicos pueden ser críticas para pacientes, trata urgencias con máxima seriedad.",
+  "mensajesBienvenida": {
+    "whatsapp": "Bienvenido a MedTech Solutions. Soy su asistente virtual. ¿En qué podemos apoyarle hoy?",
+    "web": "Bienvenido a MedTech Solutions. ¿En qué le podemos asistir? Contamos con soporte técnico, ventas y servicio postventa.",
+    "voz": "Gracias por comunicarse con MedTech Solutions, especialistas en equipamiento médico. ¿En qué le podemos servir?",
+    "sms": "MedTech Solutions: ¿En qué podemos ayudarle?"
+  },
+  "mensajesCliente": {
+    "venta": [
+      "Necesito cotización de un ultrasonido 4D para consultorio de ginecología",
+      "Estamos equipando un nuevo hospital en Querétaro, 120 camas, necesito propuesta integral",
+      "¿Tienen tomógrafo reacondicionado? Nuestro presupuesto es limitado",
+      "Requerimos demo del ventilador Dräger Savina para nuestra UCI",
+      "Participaremos en licitación de IMSS, necesitamos propuesta de 50 monitores de signos vitales",
+      "¿Manejan leasing para equipo de imagenología?"
+    ],
+    "soporte": [
+      "El ultrasonido marca error E-045 y no enciende, tenemos pacientes esperando",
+      "Necesitamos mantenimiento preventivo del tomógrafo, ya cumplió los 6 meses",
+      "Se dañó el sensor de SpO2 del monitor Mindray, necesitamos refacción urgente",
+      "El ventilador está marcando alarma de presión incorrecta",
+      "Necesitamos recalibración del electrocardiógrafo, las lecturas no son precisas",
+      "El personal nuevo necesita capacitación para operar la mesa quirúrgica"
+    ],
+    "informacion": [
+      "¿Tienen registro sanitario COFEPRIS para el tomógrafo Siemens go.Up?",
+      "Necesito la ficha técnica del monitor Mindray para una licitación",
+      "¿Qué especificaciones eléctricas necesita el tomógrafo para instalación?",
+      "¿Ofrecen cursos de capacitación certificados para ingenieros biomédicos?",
+      "¿Cuál es la diferencia entre el Voluson E10 y el E8?",
+      "¿Qué condiciones de garantía tienen para equipo reacondicionado?"
+    ],
+    "cobranza": [
+      "Necesito estado de cuenta, somos Hospital Ángeles Puebla",
+      "Enviamos orden de compra hace 2 semanas y no tenemos confirmación",
+      "Requerimos factura con desglose para reembolso del IMSS",
+      "¿Pueden aplicar el pago a 90 días? Ya tenemos historial con ustedes",
+      "Necesitamos nota de crédito por el equipo devuelto en garantía",
+      "¿Aceptan pago mediante CoDi o transferencia SPEI?"
+    ]
+  }
+}
