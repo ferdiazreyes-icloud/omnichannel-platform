@@ -1,45 +1,49 @@
 # 06 — Migration Planning (TOGAF ADM: Phase F)
 
-> This file is ONLY created when the project replaces or migrates from an existing system.
+> This file documents the path from this demo to a production system.
+> This is NOT a migration from an existing system — it is a greenfield demo.
+> This file serves as a forward-looking guide if Arena Analytics decides to productize.
 
-## Current State (As-Is)
+---
 
-- **System being replaced:** [Name and brief description]
-- **Why it's being replaced:** [Key reasons]
-- **What works well today:** [Things to preserve or replicate]
-- **What doesn't work:** [Pain points driving the migration]
+## Current State (Demo — As-Is)
 
-## Target State (To-Be)
+- **System:** Arena Omnichannel Demo (`omnichannel-platform`)
+- **Purpose:** Sales and validation tool — not production
+- **What works well today:** Fast to run, zero infrastructure, real AI, full journey simulation
+- **Limitations to address before production:** No auth, SQLite, no real channel integrations, no multi-tenancy, no compliance controls, monolithic architecture
 
-[Brief description of the end state after migration is complete]
+## Target State (Production — To-Be)
+
+A multi-tenant SaaS platform where real companies connect their actual communication channels (WhatsApp, Twilio, Meta API), manage real customer cases, and operate with full security, compliance, and scalability.
 
 ## Migration Strategy
 
-| Approach | Description |
-|---|---|
-| **Big bang** | Everything switches at once on a specific date |
-| **Phased** | Migrate module by module, both systems coexist temporarily |
-| **Parallel run** | New system runs alongside old system for validation period |
+**Chosen approach:** Phased
 
-**Chosen approach:** [Which one and why]
+The demo validates the UX and product decisions. Each production phase replaces one demo component at a time without discarding the full codebase — the Next.js frontend and business logic are reusable.
 
 ## Migration Phases
 
-| Phase | What migrates | Timeline | Rollback plan |
+| Phase | What changes | Demo equivalent | Notes |
 |---|---|---|---|
-| 1 | [e.g., "User accounts and auth"] | [e.g., "Week 1-2"] | [e.g., "Revert to old auth, data preserved"] |
-| 2 | [e.g., "Historical data"] | | |
-| 3 | [e.g., "Active workflows"] | | |
+| 1 | Split frontend + backend; add authentication (SSO + RBAC) | Next.js monolith + no auth | Frontend stays Next.js; backend moves to FastAPI or Actix |
+| 2 | Replace SQLite with PostgreSQL + Redis | SQLite | Add connection pooling, caching, session management |
+| 3 | Replace SSE with WebSockets + message queue (RabbitMQ/SQS) | SSE | Enables bidirectional real-time and event-driven architecture |
+| 4 | Replace Claude API direct calls with AI orchestrator | `src/lib/ai.ts` direct calls | Adds fallbacks, rate limiting, model routing, observability |
+| 5 | Replace simulated channels with real integrations | `src/lib/channels.ts` adapters | WhatsApp Business API, Twilio (SMS/Voice), Meta Messenger |
+| 6 | Add multi-tenancy, CRM/CDP integrations, compliance controls | Single-tenant, open access | LFPDPPP compliance, data isolation, audit logging |
 
 ## Data Migration
 
-- **Data to migrate:** [What data moves from old to new system]
-- **Data format changes:** [Any transformations needed]
-- **Validation:** [How to verify data integrity after migration]
+- **Data to migrate:** None from demo → production (demo uses seed data only, never real PII)
+- **Schema reuse:** Prisma schema (`Caso`, `Interaccion`, `Agente`) is production-ready in structure; only the database engine changes (SQLite → PostgreSQL)
+- **Validation:** Run seed script on production schema to verify compatibility before go-live
 
 ## Risks
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| [e.g., "Data loss during migration"] | High | [e.g., "Full backup before each phase, dry-run first"] |
-| | | |
+| Demo UX decisions that don't scale | Rework in production phase | Flag demo-only shortcuts explicitly in code comments |
+| Client expects demo = production features | Scope mismatch | Always clarify demo limitations at the start of sales meetings |
+| Over-engineering production prematurely | Wasted effort on demo | Enforce demo principles in `00-principles.md` — no production features in demo |
