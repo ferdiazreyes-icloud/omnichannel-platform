@@ -194,11 +194,13 @@ export default function ClientePage() {
       const mensajesConBot = [...nuevosMensajes, respuestaBot];
       setMensajes(mensajesConBot);
 
-      // Callback path: bot confirmed a callback request AND we have a phone → trigger outbound call.
+      // Callback path: bot confirmed a callback request AND we have name + phone → trigger outbound call.
+      // Name is required because Vapi uses it for the personalized greeting.
       // This takes precedence over the regular case-creation flow.
       if (
         data.solicitaLlamada &&
         data.datosCapturados?.telefono &&
+        data.datosCapturados?.nombre &&
         perfilSoportaLlamada
       ) {
         await dispararCallback(

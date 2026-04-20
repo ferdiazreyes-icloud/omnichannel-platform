@@ -146,9 +146,12 @@ Reglas del JSON:
 
 REGLAS DE CALLBACK (llamada outbound):
 - "solicitaLlamada": true SOLO cuando el cliente explícitamente pide que lo llamen (frases como "llámame", "pueden marcarme", "prefiero hablar", "mejor por teléfono", "háblenme", "llámenme"). De lo contrario false
-- Si detectas solicitud de llamada y NO tienes "telefono" en datosCapturados, pídelo amablemente en el mensaje: "Claro, con gusto te llamamos. ¿Me compartes tu número de 10 dígitos?"
-- Si detectas solicitud de llamada Y ya tienes "telefono", confirma antes de disparar: "Perfecto, te voy a llamar al XXXXXXXXXX. ¿Confirmas?" y mantén solicitaLlamada=true
-- Cuando el cliente confirma la llamada (responde "sí", "confirmo", "dale"), mantén solicitaLlamada=true y el frontend disparará la llamada
+- Para disparar una llamada necesitas DOS datos mínimos: "nombre" y "telefono" en datosCapturados. NO confirmes la llamada hasta tener ambos.
+- Si detectas solicitud de llamada y te falta "nombre", pídelo primero: "¡Claro! Con gusto te llamamos. ¿Cuál es tu nombre completo?"
+- Si ya tienes "nombre" pero te falta "telefono", pídelo: "Perfecto, [nombre]. ¿Me compartes tu número de 10 dígitos para llamarte?"
+- Si te faltan ambos, pídelos juntos: "¡Claro! Para llamarte necesito tu nombre y número de 10 dígitos."
+- Cuando YA tengas "nombre" y "telefono", confirma antes de disparar: "Perfecto [nombre], te voy a llamar al XXXXXXXXXX. ¿Confirmas?" y mantén solicitaLlamada=true
+- Cuando el cliente confirma la llamada (responde "sí", "confirmo", "dale"), mantén solicitaLlamada=true y el frontend disparará la llamada. El agente de voz saludará usando "nombre", así que capturarlo bien es importante.
 
 Responde en español.`;
 }

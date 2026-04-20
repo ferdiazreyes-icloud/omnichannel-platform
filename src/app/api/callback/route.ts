@@ -58,7 +58,17 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const nombre = datosCapturados.nombre || "Cliente";
+  const nombre = datosCapturados.nombre?.trim();
+  if (!nombre) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: "missing_name",
+        mensaje: "Necesitamos tu nombre para que el agente te salude personalmente.",
+      },
+      { status: 400 }
+    );
+  }
   const resumen = await resumirConversacion(mensajes, datosCapturados);
 
   const now = new Date();
