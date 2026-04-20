@@ -102,6 +102,21 @@ describe("POST /api/callback", () => {
     expect(prisma.caso.create).not.toHaveBeenCalled();
   });
 
+  it("rejects when name is missing (needed for personalized greeting)", async () => {
+    const res = await POST(
+      buildRequest({
+        mensajes: [],
+        datosCapturados: { telefono: "5512345678" },
+      }) as never
+    );
+
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toBe("missing_name");
+    expect(prisma.caso.create).not.toHaveBeenCalled();
+    expect(dispararLlamadaOutbound).not.toHaveBeenCalled();
+  });
+
   it("creates case, logs two system interactions, and triggers Vapi on happy path", async () => {
     vi.mocked(dispararLlamadaOutbound).mockResolvedValue({
       success: true,
