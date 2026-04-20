@@ -43,6 +43,18 @@
 2. Routing engine applies rules: intent → specialist team (ventas/soporte/cobranza/general), priority → SLA tier, load balancing → agent with fewest active cases
 3. Fallback: general pool if no specialist available
 
+### Flow 8: Customer (callback) — Escalates from text chat to a phone call
+1. Customer is chatting with the text bot (telco profile only for now)
+2. Customer either writes "llámame" / "prefiero que me llamen" OR clicks the floating "📞 Prefiero que me llamen" button
+3. Bot asks for a 10-digit phone number if not yet captured, then confirms ("Te voy a llamar al XXXX, ¿confirmas?")
+4. When the phone is captured and callback is requested, the frontend calls `/api/callback`:
+   - Generates a short Spanish summary of the chat with Claude (≤150 words, third person)
+   - Creates a case with `canalOrigen: "voz"`, priority inherited from the bot
+   - Logs a system interaction with the summary
+   - POSTs to the Vapi/Exitus outbound endpoint with a hardcoded payload for the telco profile
+5. Customer sees "📞 Te estamos llamando al XXXX · Caso CONEC-XXXX"
+6. If the outbound call fails, the case is still created and UI shows a fallback message
+
 ### Flow 7: Guided tour — New visitor gets oriented
 1. Visitor opens any page for the first time
 2. Interactive tour overlay highlights key elements with explanations (Krug UX principles)
@@ -69,6 +81,7 @@
 | UC-15 | View alerts | Supervisor | SLA at-risk, overloaded agents, anomalies |
 | UC-16 | Follow guided tour | Any | Interactive overlay explains each page |
 | UC-17 | View Command Center demo | Any | End-to-end journey in a single `/demo` page |
+| UC-18 | Request outbound callback | Customer | From the text chat, request a phone callback. System summarizes chat, creates a case, and triggers outbound call (telco profile only) |
 
 ## Business Rules
 

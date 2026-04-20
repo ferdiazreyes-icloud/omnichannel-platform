@@ -31,6 +31,7 @@
 | FR-23 | Interactive guided tour across all pages (Krug UX principles) | Should have | ✅ Done | — |
 | FR-24 | `/demo` Command Center page showing end-to-end journey in a single view | Should have | ✅ Done | — |
 | FR-25 | Outbound voice calls to real phone numbers triggered from agent case detail | Should have | ⏳ Planned | — |
+| FR-26 | Customer can request a callback from the text bot ("llámame") or via a floating button; system generates a chat summary, creates a case, and triggers an outbound call via Vapi (Exitus). Telco profile only in this iteration. | Should have | ✅ Done | feature/callback-outbound-vapi |
 
 ## Non-Functional Requirements
 
@@ -68,3 +69,4 @@
 |---|---|---|---|
 | 2026-04-17 | Initial requirements defined from README | Project setup | All ADM artifacts |
 | 2026-04-17 | Updated to reflect actual code in `claude/omnichannel-customer-ops-demo-w2Fu3` | Sync docs with built code | FR-20 to FR-24 added; FR-01 to FR-19 marked Done; NFR updated; tech stack corrected (Next 16, OpenAI Realtime, Railway) |
+| 2026-04-20 | Added outbound callback (FR-26) via Vapi/Exitus for telco profile | Demo wow for sales: text→voice handoff with preserved context | New endpoint `/api/callback`, `src/lib/vapi.ts`, UI callback button, system prompt detects callback intent |

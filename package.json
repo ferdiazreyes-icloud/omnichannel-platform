@@ -8,7 +8,9 @@
     "postbuild": "node scripts/seed.js",
     "start": "next start -p ${PORT:-3000}",
     "lint": "eslint",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "prisma": {
     "seed": "node scripts/seed.js"
@@ -31,10 +33,12 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/uuid": "^10.0.0",
+    "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.4"
   }
 }
