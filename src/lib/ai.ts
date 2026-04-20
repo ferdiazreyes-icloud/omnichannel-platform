@@ -17,9 +17,11 @@ export interface BotResponse {
   datosCapturados: {
     nombre?: string;
     contacto?: string;
+    telefono?: string;
     asunto?: string;
   };
   casoListo: boolean;
+  solicitaLlamada: boolean;
 }
 
 export async function chatWithBot(
@@ -67,10 +69,39 @@ export async function chatWithBot(
       prioridad: null,
       datosCapturados: {},
       casoListo: false,
+      solicitaLlamada: false,
     };
   } catch {
     return simulateBot(mensajes, canal, perfil);
   }
+}
+
+const CALLBACK_KEYWORDS = [
+  "llámame",
+  "llamame",
+  "llámenme",
+  "llamenme",
+  "márcame",
+  "marcame",
+  "márquenme",
+  "marquenme",
+  "prefiero hablar",
+  "prefiero que me llamen",
+  "mejor por teléfono",
+  "mejor por telefono",
+  "háblame",
+  "hablame",
+];
+
+function detectaSolicitudLlamada(texto: string): boolean {
+  const t = texto.toLowerCase();
+  return CALLBACK_KEYWORDS.some((kw) => t.includes(kw));
+}
+
+function extraerTelefono(texto: string): string | undefined {
+  const digits = texto.replace(/\D/g, "");
+  const match = digits.match(/\d{10}/);
+  return match ? match[0] : undefined;
 }
 
 function simulateBot(
@@ -93,6 +124,7 @@ function simulateBot(
       prioridad: null,
       datosCapturados: {},
       casoListo: false,
+      solicitaLlamada: false,
     };
   }
 
@@ -162,6 +194,16 @@ function simulateBot(
     }
   }
 
+  // Aggregate callback signals across the whole conversation so it persists
+  // turn-over-turn (e.g. user first says "llámame", later provides phone).
+  const userTexts = mensajes
+    .filter((m) => m.role === "user")
+    .map((m) => m.content);
+  const pidioLlamada = userTexts.some(detectaSolicitudLlamada);
+  const telefonoCapturado = userTexts
+    .map(extraerTelefono)
+    .find((t): t is string => Boolean(t));
+
   if (msgCount === 2) {
     const intentLabel = intencion
       ? `parece que necesitas ayuda con ${intencion}`
@@ -171,39 +213,89 @@ function simulateBot(
       intencion,
       categoria,
       prioridad: null,
-      datosCapturados: {},
+      datosCapturados: telefonoCapturado ? { telefono: telefonoCapturado } : {},
       casoListo: false,
+      solicitaLlamada: pidioLlamada,
     };
   }
 
   if (msgCount === 3) {
     const nombre = mensajes[mensajes.length - 1]?.content || "Cliente";
+    const mensaje = pidioLlamada && !telefonoCapturado
+      ? `Gracias, ${nombre}. Para llamarte necesito tu número de 10 dígitos. ¿Me lo compartes?`
+      : `Gracias, ${nombre}. ¿Me podrías compartir un correo electrónico o número de teléfono para que el equipo de ${perfil.nombreCorto} pueda contactarte?`;
     return {
-      mensaje: `Gracias, ${nombre}. ¿Me podrías compartir un correo electrónico o número de teléfono para que el equipo de ${perfil.nombreCorto} pueda contactarte?`,
+      mensaje,
       intencion: intencion || "informacion",
       categoria: categoria || "Consulta general",
       prioridad: "media",
-      datosCapturados: { nombre },
+      datosCapturados: telefonoCapturado
+        ? { nombre, telefono: telefonoCapturado }
+        : { nombre },
       casoListo: false,
+      solicitaLlamada: pidioLlamada,
     };
   }
 
   // Message 4+: create case
   const nombreMatch = mensajes[4]?.content || "Cliente";
   const contacto = mensajes[mensajes.length - 1]?.content || "sin contacto";
+  const telefonoFinal = telefonoCapturado || extraerTelefono(contacto);
 
   return {
-    mensaje: `Perfecto, ya tengo toda la información necesaria. Voy a crear un caso en ${perfil.nombreCorto} para que un especialista te atienda lo antes posible. Recibirás un número de seguimiento en un momento. ¡Gracias por contactarnos!`,
+    mensaje: pidioLlamada && telefonoFinal
+      ? `Perfecto, ${nombreMatch}. Te voy a llamar al ${telefonoFinal} en un momento. ¿Confirmas?`
+      : `Perfecto, ya tengo toda la información necesaria. Voy a crear un caso en ${perfil.nombreCorto} para que un especialista te atienda lo antes posible. Recibirás un número de seguimiento en un momento. ¡Gracias por contactarnos!`,
     intencion: intencion || "informacion",
     categoria: categoria || "Consulta general",
     prioridad: lastMsg.includes("urgente") || lastMsg.includes("emergencia") ? "alta" : "media",
     datosCapturados: {
       nombre: nombreMatch,
       contacto: contacto,
+      telefono: telefonoFinal,
       asunto: `${categoria || "Consulta"} - ${perfil.nombreCorto}`,
     },
     casoListo: true,
+    solicitaLlamada: pidioLlamada,
   };
+}
+
+export async function resumirConversacion(
+  mensajes: Array<{ role: "user" | "assistant"; content: string }>,
+  datosCapturados: { nombre?: string; asunto?: string }
+): Promise<string> {
+  const perfil = obtenerPerfilActivo();
+  const historial = mensajes
+    .map((m) => `${m.role === "user" ? "Cliente" : "Bot"}: ${m.content}`)
+    .join("\n");
+
+  const fallback = `Cliente ${datosCapturados.nombre || ""} contactó a ${perfil.nombreCorto}${
+    datosCapturados.asunto ? ` por: ${datosCapturados.asunto}` : ""
+  }. Continuar la conversación por voz.`.trim();
+
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return fallback;
+  }
+
+  try {
+    const response = await anthropic.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 300,
+      system: `Eres un asistente que resume conversaciones de chat para que un agente de voz las lea antes de llamar al cliente. Responde en español, máximo 150 palabras, en tercera persona, con los hechos clave: motivo del contacto, producto/servicio mencionado, estado emocional si aplica, y qué espera el cliente. No incluyas saludos ni despedidas. Solo el resumen plano, sin formato.`,
+      messages: [
+        {
+          role: "user",
+          content: `Resume esta conversación del chat de ${perfil.nombreCorto} (${perfil.industria}):\n\n${historial}`,
+        },
+      ],
+    });
+
+    const text =
+      response.content[0].type === "text" ? response.content[0].text : "";
+    return text.trim() || fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 export async function sugerirRespuesta(

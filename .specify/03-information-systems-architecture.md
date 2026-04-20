@@ -67,7 +67,8 @@ nuevo → asignado → en_curso → [escalado] → resuelto → cerrado
 | Routing Engine (`src/lib/routing.ts`) | Assigns cases by intent→team, load balancing, fallback to general | Prisma |
 | SLA Engine (`src/lib/sla.ts`) | Calculates deadlines, evaluates compliance (a_tiempo/en_riesgo/vencido), countdown | date-fns |
 | Channel Adapters (`src/lib/channels.ts`) | Normalizes messages across simulated channels | — |
-| AI Wrapper — Text (`src/lib/ai.ts`) | `chatWithBot()`: calls Claude for text conversations + intent detection. `sugerirRespuesta()`: agent response drafts | Anthropic Claude API |
+| AI Wrapper — Text (`src/lib/ai.ts`) | `chatWithBot()`: calls Claude for text conversations + intent detection (including callback requests). `sugerirRespuesta()`: agent response drafts. `resumirConversacion()`: generates ≤150-word Spanish summary of a chat for the voice agent | Anthropic Claude API |
+| Outbound Callback (`src/lib/vapi.ts` + `src/app/api/callback/route.ts`) | Builds the Vapi outbound payload (hardcoded for telco profile), creates the case, logs system interactions, and POSTs to Exitus. Handles profile validation and upstream failures with fallback | Exitus Comms (Vapi) |
 | Voice Session Endpoint (`src/app/api/voice/session/route.ts`) | Generates ephemeral OpenAI Realtime token; injects active profile as system prompt | OpenAI Realtime API |
 | WebRTC Hook (`src/hooks/use-webrtc.ts`) | Manages full WebRTC lifecycle: peer connection, audio I/O, SDP exchange, transcript extraction | OpenAI Realtime API (SDP), Browser WebRTC |
 | SSE Endpoint (`src/app/api/sse/route.ts`) | Pushes real-time updates to agent inbox and dashboard | Prisma |
@@ -90,7 +91,8 @@ nuevo → asignado → en_curso → [escalado] → resuelto → cerrado
 
 | System | Purpose | Protocol | Used By |
 |---|---|---|---|
-| Anthropic Claude API (`claude-sonnet-4-20250514`) | Text bot conversations + agent response suggestions | REST (HTTPS) | `src/lib/ai.ts` |
+| Anthropic Claude API (`claude-sonnet-4-20250514`) | Text bot conversations + agent response suggestions + chat summaries for callback | REST (HTTPS) | `src/lib/ai.ts` |
 | OpenAI Realtime API (`gpt-4o-mini-realtime-preview`) | Voice bot: low-latency audio streaming, VAD, transcription | WebRTC + REST (token) | `src/hooks/use-webrtc.ts`, `src/app/api/voice/session/route.ts` |
+| Exitus Comms (Vapi) — `VAPI_OUTBOUND_URL` | Outbound callback trigger. Demo hardcodes `from_number: "3341700562"` and `destination: "demo-telco-dev"` (telco profile only). No auth. Fire-and-forget: no webhook back — Vapi manages the call externally. | REST (HTTPS) | `src/lib/vapi.ts`, `src/app/api/callback/route.ts` |
 
 > Both integrations have simulation fallbacks: if the API key is absent, the system returns scripted responses and marks itself as `simulation: true`.

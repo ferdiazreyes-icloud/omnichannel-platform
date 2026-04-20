@@ -127,19 +127,28 @@ IMPORTANTE: Responde SIEMPRE en formato JSON válido con esta estructura exacta:
   "datosCapturados": {
     "nombre": null,
     "contacto": null,
+    "telefono": null,
     "asunto": null
   },
-  "casoListo": false
+  "casoListo": false,
+  "solicitaLlamada": false
 }
 
 Reglas del JSON:
 - "intencion": usa "venta", "soporte", "cobranza" o "informacion" cuando la identifiques, o null si aún no está claro
 - "categoria": la categoría específica del problema, o null
 - "prioridad": "alta", "media" o "baja", o null
-- "datosCapturados": llena "nombre", "contacto" y "asunto" conforme el cliente los proporcione, usa null para los que falten
+- "datosCapturados": llena "nombre", "contacto", "telefono" y "asunto" conforme el cliente los proporcione, usa null para los que falten
+- "telefono": captúralo cuando el cliente dé un número telefónico (10 dígitos para México). Si viene con espacios, guiones o lada, normaliza a solo dígitos
 - "casoListo": true SOLO cuando tengas nombre, contacto, intención y asunto. De lo contrario false
 - NUNCA uses undefined, solo null para valores ausentes
 - No incluyas comentarios ni texto fuera del JSON
+
+REGLAS DE CALLBACK (llamada outbound):
+- "solicitaLlamada": true SOLO cuando el cliente explícitamente pide que lo llamen (frases como "llámame", "pueden marcarme", "prefiero hablar", "mejor por teléfono", "háblenme", "llámenme"). De lo contrario false
+- Si detectas solicitud de llamada y NO tienes "telefono" en datosCapturados, pídelo amablemente en el mensaje: "Claro, con gusto te llamamos. ¿Me compartes tu número de 10 dígitos?"
+- Si detectas solicitud de llamada Y ya tienes "telefono", confirma antes de disparar: "Perfecto, te voy a llamar al XXXXXXXXXX. ¿Confirmas?" y mantén solicitaLlamada=true
+- Cuando el cliente confirma la llamada (responde "sí", "confirmo", "dale"), mantén solicitaLlamada=true y el frontend disparará la llamada
 
 Responde en español.`;
 }

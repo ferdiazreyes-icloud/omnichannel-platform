@@ -1,8 +1,18 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import InteractiveTour, { type TourStep } from "@/components/tour/InteractiveTour";
+
+function FloatingPortal({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted || typeof document === "undefined") return null;
+  return createPortal(children, document.body);
+}
 
 const TOUR_STEPS_SELECTOR: TourStep[] = [
   {
@@ -51,12 +61,15 @@ interface CanalInfo {
 }
 
 interface PerfilData {
+  id: string;
   nombre: string;
   nombreCorto: string;
   logo: string;
   colores: { primario: string; secundario: string; acento: string; fondo: string };
   canalesHabilitados: string[];
 }
+
+type CallbackEstado = "idle" | "disparando" | "exito" | "error";
 
 const ALL_CANALES: CanalInfo[] = [
   { id: "whatsapp", nombre: "WhatsApp", color: "#25D366", bgColor: "#dcf8c6", icon: "💬" },
@@ -74,7 +87,10 @@ export default function ClientePage() {
   const [cargando, setCargando] = useState(false);
   const [casoCreado, setCasoCreado] = useState<{ numeroCaso: string; id: string } | null>(null);
   const [perfil, setPerfil] = useState<PerfilData | null>(null);
+  const [callbackEstado, setCallbackEstado] = useState<CallbackEstado>("idle");
+  const [callbackInfo, setCallbackInfo] = useState<{ telefono: string; mensaje: string } | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const perfilSoportaLlamada = perfil?.id === "telco-ejemplo";
 
   useEffect(() => {
     fetch("/api/perfil")
@@ -93,18 +109,65 @@ export default function ClientePage() {
   const nombreEmpresa = perfil?.nombreCorto || "Arena";
   const colorPrimario = perfil?.colores.primario || "#2563EB";
 
-  const enviarMensaje = async () => {
-    if (!input.trim() || cargando || !canalSeleccionado) return;
+  const dispararCallback = async (
+    mensajesActuales: Mensaje[],
+    datosCapturados: {
+      nombre?: string;
+      contacto?: string;
+      telefono?: string;
+      asunto?: string;
+    },
+    intencion: string | null,
+    categoria: string | null,
+    prioridad: string | null
+  ) => {
+    setCallbackEstado("disparando");
+    try {
+      const res = await fetch("/api/callback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mensajes: mensajesActuales.map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+          datosCapturados,
+          intencion,
+          categoria,
+          prioridad,
+        }),
+      });
+      const data = await res.json();
+      if (data.casoId && data.numeroCaso) {
+        setCasoCreado({ id: data.casoId, numeroCaso: data.numeroCaso });
+      }
+      setCallbackInfo({
+        telefono: data.telefono || datosCapturados.telefono || "",
+        mensaje: data.mensaje || "",
+      });
+      setCallbackEstado(data.success ? "exito" : "error");
+    } catch {
+      setCallbackEstado("error");
+      setCallbackInfo({
+        telefono: datosCapturados.telefono || "",
+        mensaje: "No pudimos iniciar la llamada. Un agente te contactará pronto.",
+      });
+    }
+  };
+
+  const enviarMensaje = async (override?: string) => {
+    const texto = (override ?? input).trim();
+    if (!texto || cargando || !canalSeleccionado) return;
 
     const nuevoMensaje: Mensaje = {
       role: "user",
-      content: input.trim(),
+      content: texto,
       timestamp: new Date(),
     };
 
     const nuevosMensajes = [...mensajes, nuevoMensaje];
     setMensajes(nuevosMensajes);
-    setInput("");
+    if (override === undefined) setInput("");
     setCargando(true);
 
     try {
@@ -128,7 +191,25 @@ export default function ClientePage() {
         timestamp: new Date(),
       };
 
-      setMensajes([...nuevosMensajes, respuestaBot]);
+      const mensajesConBot = [...nuevosMensajes, respuestaBot];
+      setMensajes(mensajesConBot);
+
+      // Callback path: bot confirmed a callback request AND we have a phone → trigger outbound call.
+      // This takes precedence over the regular case-creation flow.
+      if (
+        data.solicitaLlamada &&
+        data.datosCapturados?.telefono &&
+        perfilSoportaLlamada
+      ) {
+        await dispararCallback(
+          mensajesConBot,
+          data.datosCapturados,
+          data.intencion,
+          data.categoria,
+          data.prioridad
+        );
+        return;
+      }
 
       if (data.casoListo) {
         const casoRes = await fetch("/api/casos", {
@@ -166,6 +247,10 @@ export default function ClientePage() {
     } finally {
       setCargando(false);
     }
+  };
+
+  const solicitarLlamadaDesdeBoton = () => {
+    enviarMensaje("Prefiero que me llamen");
   };
 
   // Channel selection screen
@@ -224,6 +309,8 @@ export default function ClientePage() {
     setCanalSeleccionado(null);
     setMensajes([]);
     setCasoCreado(null);
+    setCallbackEstado("idle");
+    setCallbackInfo(null);
   };
 
   const renderBotAvatar = () => (
@@ -235,7 +322,72 @@ export default function ClientePage() {
     </div>
   );
 
-  const casoCard = casoCreado && (
+  const callbackCard = callbackEstado !== "idle" && (
+    <div
+      className={`rounded-xl p-4 text-center animate-fade-in border ${
+        callbackEstado === "error"
+          ? "bg-red-50 border-red-200"
+          : callbackEstado === "exito"
+          ? "bg-green-50 border-green-200"
+          : "bg-blue-50 border-blue-200"
+      }`}
+    >
+      {callbackEstado === "disparando" && (
+        <>
+          <p className="text-blue-800 font-semibold mb-1">📞 Conectando llamada…</p>
+          <p className="text-blue-600 text-sm">
+            Preparando llamada al <strong>{callbackInfo?.telefono}</strong>
+          </p>
+          <div className="flex justify-center gap-1.5 mt-2">
+            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse-dot" />
+            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse-dot" style={{ animationDelay: "0.3s" }} />
+            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse-dot" style={{ animationDelay: "0.6s" }} />
+          </div>
+        </>
+      )}
+      {callbackEstado === "exito" && (
+        <>
+          <p className="text-green-800 font-semibold mb-1">📞 Te estamos llamando</p>
+          <p className="text-green-600 text-sm mb-2">
+            Suena al <strong>{callbackInfo?.telefono}</strong>
+            {casoCreado && (
+              <>
+                {" "}&middot; Caso <strong>{casoCreado.numeroCaso}</strong>
+              </>
+            )}
+          </p>
+          {casoCreado && (
+            <Link
+              href={`/agente/${casoCreado.id}`}
+              className="inline-block text-xs text-white px-4 py-1.5 rounded-full transition-colors"
+              style={{ backgroundColor: colorPrimario }}
+            >
+              Ver caso en consola del agente &rarr;
+            </Link>
+          )}
+        </>
+      )}
+      {callbackEstado === "error" && (
+        <>
+          <p className="text-red-800 font-semibold mb-1">No pudimos iniciar la llamada</p>
+          <p className="text-red-600 text-sm">
+            {callbackInfo?.mensaje || "Un agente te contactará pronto."}
+          </p>
+          {casoCreado && (
+            <Link
+              href={`/agente/${casoCreado.id}`}
+              className="inline-block text-xs text-white px-4 py-1.5 rounded-full transition-colors mt-2"
+              style={{ backgroundColor: colorPrimario }}
+            >
+              Ver caso <strong>{casoCreado.numeroCaso}</strong> &rarr;
+            </Link>
+          )}
+        </>
+      )}
+    </div>
+  );
+
+  const casoCard = callbackCard || (casoCreado && (
     <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center animate-fade-in">
       <p className="text-green-800 font-semibold mb-1">Caso creado exitosamente</p>
       <p className="text-green-600 text-sm mb-2">
@@ -249,7 +401,30 @@ export default function ClientePage() {
         Ver caso en consola del agente &rarr;
       </Link>
     </div>
-  );
+  ));
+
+  const mostrarBotonCallback =
+    perfilSoportaLlamada &&
+    mensajes.length > 0 &&
+    !casoCreado &&
+    callbackEstado === "idle" &&
+    !cargando;
+
+  const callbackButton = mostrarBotonCallback ? (
+    <FloatingPortal>
+      <button
+        onClick={solicitarLlamadaDesdeBoton}
+        className="fixed bottom-24 right-4 md:right-8 z-40 flex items-center gap-2 bg-white border-2 rounded-full pl-3 pr-4 py-2 shadow-lg hover:shadow-xl transition-all animate-fade-in"
+        style={{ borderColor: colorPrimario }}
+        title="Pide una llamada de Conecta Telecom"
+      >
+        <span className="text-lg">📞</span>
+        <span className="text-sm font-medium" style={{ color: colorPrimario }}>
+          Prefiero que me llamen
+        </span>
+      </button>
+    </FloatingPortal>
+  ) : null;
 
   // ─── SMS: iMessage-style ───────────────────────────────────
   if (isSMS) {
@@ -305,6 +480,7 @@ export default function ClientePage() {
           )}
 
           {casoCard}
+          {callbackButton}
           <div ref={chatEndRef} />
         </main>
 
@@ -322,7 +498,7 @@ export default function ClientePage() {
               />
               <div className="flex flex-col items-end gap-1">
                 <button
-                  onClick={enviarMensaje}
+                  onClick={() => enviarMensaje()}
                   disabled={cargando || !input.trim()}
                   className="bg-blue-500 text-white rounded-full w-9 h-9 flex items-center justify-center disabled:opacity-30 transition-colors"
                 >
@@ -408,6 +584,7 @@ export default function ClientePage() {
             )}
 
             {casoCard}
+          {callbackButton}
             <div ref={chatEndRef} />
           </main>
 
@@ -426,7 +603,7 @@ export default function ClientePage() {
                   disabled={cargando}
                 />
                 <button
-                  onClick={enviarMensaje}
+                  onClick={() => enviarMensaje()}
                   disabled={cargando || !input.trim()}
                   className="text-white rounded-full w-9 h-9 flex items-center justify-center disabled:opacity-30 transition-colors flex-shrink-0"
                   style={{ backgroundColor: colorPrimario }}
@@ -514,6 +691,7 @@ export default function ClientePage() {
           )}
 
           {casoCard}
+          {callbackButton}
           <div ref={chatEndRef} />
         </main>
 
@@ -531,7 +709,7 @@ export default function ClientePage() {
               />
               {input.trim() ? (
                 <button
-                  onClick={enviarMensaje}
+                  onClick={() => enviarMensaje()}
                   disabled={cargando}
                   className="text-[#1877F2] font-semibold text-sm disabled:opacity-30 transition-colors"
                 >
@@ -627,6 +805,7 @@ export default function ClientePage() {
           )}
 
           {casoCard}
+          {callbackButton}
           <div ref={chatEndRef} />
         </main>
 
@@ -644,7 +823,7 @@ export default function ClientePage() {
               />
               {input.trim() ? (
                 <button
-                  onClick={enviarMensaje}
+                  onClick={() => enviarMensaje()}
                   disabled={cargando}
                   className="text-[#3797F0] font-semibold text-sm disabled:opacity-30"
                 >
@@ -743,6 +922,7 @@ export default function ClientePage() {
         )}
 
         {casoCard}
+          {callbackButton}
         <div ref={chatEndRef} />
       </main>
 
@@ -760,7 +940,7 @@ export default function ClientePage() {
               disabled={cargando}
             />
             <button
-              onClick={enviarMensaje}
+              onClick={() => enviarMensaje()}
               disabled={cargando || !input.trim()}
               className="text-white rounded-full px-5 py-2.5 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               style={{ backgroundColor: colorPrimario }}
